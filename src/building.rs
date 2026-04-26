@@ -20,6 +20,8 @@ pub struct BuildingData {
     pub id: String,
     pub name: String,
 
+    pub description: String,
+
     pub planet_filters: Vec<PlanetFilter>,
 
     pub initial: bool,
@@ -60,6 +62,7 @@ impl Default for BuildingData {
         BuildingData {
             id: "".to_string(),
             name: "".to_string(),
+            description: "".to_string(),
             planet_filters: Vec::new(),
             initial: false,
             unique: false,
@@ -168,6 +171,9 @@ pub enum BuildingToken {
     #[token("name")]
     Name,
 
+    #[token("description")]
+    Description,
+
     #[token("orbital")]
     Orbital,
     #[token("all_orbitals")]
@@ -262,6 +268,7 @@ impl fmt::Display for BuildingToken {
 lalrpop_mod!(pub buildings);
 pub enum Field {
     Name(String),
+    Description(String),
     PlanetFilters(Vec<PlanetFilter>),
     Initial(bool),
     Unique(bool),

@@ -20,7 +20,7 @@ extern {
         "]" => BuildingToken::RightSquare,
         "(" => BuildingToken::LeftBracket,
         ")" => BuildingToken::RightBracket,
-        
+
         "string" => BuildingToken::String(<String>),
         "number" => BuildingToken::Number(<u64>),
         "decimal" => BuildingToken::DecimalNumber(<Decimal>),
@@ -28,9 +28,11 @@ extern {
         "id" => BuildingToken::Id,
         "name" => BuildingToken::Name,
 
+        "description" => BuildingToken::Description,
+
         "orbital" => BuildingToken::Orbital,
         "all_orbitals" => BuildingToken::AllOrbitals,
-        
+
         "planet_filters" => BuildingToken::PlanetFilters,
         "initial" => BuildingToken::Initial,
         "unique" => BuildingToken::Unique,
@@ -48,11 +50,11 @@ extern {
         "workers" => BuildingToken::Workers,
 
         "stations" => BuildingToken::Stations,
-        
+
         "private_sector" => BuildingToken::PrivateSector,
 
         "misc" => BuildingToken::Misc,
-        
+
         "magnetosphere_equilibrium" => BuildingToken::MagnetosphereEquilibrium,
         "atmosphere_equilibrium" => BuildingToken::AtmosphereEquilibrium,
         "temperature_change" => BuildingToken::TemperatureChange,
@@ -87,6 +89,9 @@ Building:BuildingData = {
             match f {
                 Field::Name(n) => {
                     building_data.name = n;
+                }
+                Field::Description(d) => {
+                    building_data.description = d.replace("\\n", "\n");
                 }
                 Field::PlanetFilters(p) => {
                     building_data.planet_filters = p;
@@ -148,6 +153,7 @@ Building:BuildingData = {
 
 Field:Field = {
     <n:Name> => Field::Name(n),
+    <d:Description> => Field::Description(d),
     <p:PlanetFilters> => Field::PlanetFilters(p),
     <i:Initial> => Field::Initial(i),
     <u:Unique> => Field::Unique(u),
@@ -203,6 +209,10 @@ Id:String = {
 
 Name:String = {
     "name" "=" <id:"string"> => id,
+}
+
+Description:String = {
+    "description" "=" <text:"string"> => text,
 }
 
 PlanetFilters:Vec<PlanetFilter> = {
