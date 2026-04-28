@@ -250,7 +250,7 @@ where
 }
 
 pub fn parse(file_name: &str, contents: &str) -> ParseData {
-    lalrpop::Configuration::new().emit_report(false);
+    lalrpop::Configuration::new().emit_report(false).log_quiet();
     let tokens = lex::<Token>(file_name, contents);
 
     let main_parse = lib::SectionsParser::new().parse(tokens);
