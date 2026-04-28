@@ -1,0 +1,64 @@
+use crate::star::{StarData,StarField,StarToken};
+
+use rust_decimal::prelude::*;
+
+grammar;
+
+extern {
+    type Location = usize;
+    type Error = String;
+
+    enum StarToken {
+        "string" => StarToken::String(<String>),
+        "decimal_number" => StarToken::DecimalNumber(<Decimal>),
+
+        "=" => StarToken::Equal,
+        "{" => StarToken::LeftCurly,
+        "}" => StarToken::RightCurly,
+
+
+        "asset_location" => StarToken::AssetLocation,
+        "claim_asset_location" => StarToken::ClaimAssetLocation,
+        "scale" => StarToken::Scale,
+    }
+}
+
+pub StarData:Vec<StarData> = {
+    StarDatum*
+}
+
+StarDatum:StarData = {
+    <id:"string"> "=" "{" <fields:StarField*> "}" => {
+        let mut star_data = StarData{
+            id,
+            ..Default::default()
+        };
+        for f in fields {
+            match f {
+                StarField::AssetLocation(a) => star_data.asset_location = a,
+                StarField::ClaimAssetLocation(c) => star_data.claim_asset_location = c,
+                StarField::Scale(s) => star_data.scale = s,
+            }
+        }
+        star_data
+    }
+
+}
+
+StarField:StarField = {
+    <a:AssetLocation> => StarField::AssetLocation(a),
+    <c:ClaimAssetLocation> => StarField::ClaimAssetLocation(c),
+    <s:Scale> => StarField::Scale(s),
+}
+
+AssetLocation:String = {
+    "asset_location" "=" <s:"string"> => s,
+}
+
+ClaimAssetLocation:String = {
+    "claim_asset_location" "=" <s:"string"> => s,
+}
+
+Scale:Decimal = {
+    "scale" "=" <n:"decimal_number"> => n,
+}

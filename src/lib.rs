@@ -17,7 +17,7 @@ use crate::{
     asteroid_mining::AsteroidMiningData, augmentations::AugmentationData, common::DataParser,
     designation::DesignationData, orbital::OrbitalData, ranks::RankData, ship::ShipData,
     shipyard::ShipyardData, shipyard_buildings::ShipyardBuildingData,
-    species_trait::SpeciesTraitData, stapledon_swarm::StapledonSwarmData,
+    species_trait::SpeciesTraitData, stapledon_swarm::StapledonSwarmData, star::StarData,
     stellar_system::StellarData, tooltips::ToolTipsData,
 };
 
@@ -35,6 +35,7 @@ pub mod shipyard;
 pub mod shipyard_buildings;
 pub mod species_trait;
 pub mod stapledon_swarm;
+pub mod star;
 pub mod stellar_system;
 pub mod tech;
 pub mod tooltips;
@@ -106,6 +107,7 @@ create_parse_data!({
     pub shipyard: Vec<ShipyardData>,
     pub shipyard_buildings:Vec<ShipyardBuildingData>,
     pub stapledon:Vec<StapledonSwarmData>,
+    pub star_data:Vec<StarData>,
     pub stellar_system:Vec<StellarData>,
     pub tech_data: Vec<TechData>,
     pub tooltips:Vec<ToolTipsData>,
@@ -140,6 +142,8 @@ pub enum Token {
     SpecieTraits,
     #[token("#stapledon_swarm")]
     Stapledon,
+    #[token("#star_data")]
+    StarData,
     #[token("#stellar_system")]
     StellarSystem,
     #[token("#tech")]
@@ -172,6 +176,7 @@ pub enum Section {
     Shipyard(String),
     ShipyardBuildings(String),
     Stapledon(String),
+    StarData(String),
     StellarSystem(String),
     Tech(String),
     ToolTips(String),
@@ -245,6 +250,7 @@ where
 }
 
 pub fn parse(file_name: &str, contents: &str) -> ParseData {
+    lalrpop::Configuration::new().emit_report(false);
     let tokens = lex::<Token>(file_name, contents);
 
     let main_parse = lib::SectionsParser::new().parse(tokens);
@@ -290,6 +296,9 @@ pub fn parse(file_name: &str, contents: &str) -> ParseData {
                         .append(&mut parse_section(file_name, &s)),
                     Section::Stapledon(s) => parse_data
                         .stapledon
+                        .append(&mut parse_section(file_name, &s)),
+                    Section::StarData(s) => parse_data
+                        .star_data
                         .append(&mut parse_section(file_name, &s)),
                     Section::StellarSystem(s) => parse_data
                         .stellar_system
