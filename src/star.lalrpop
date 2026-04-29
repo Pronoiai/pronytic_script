@@ -20,6 +20,7 @@ extern {
         "asset_location" => StarToken::AssetLocation,
         "claim_asset_location" => StarToken::ClaimAssetLocation,
         "scale" => StarToken::Scale,
+        "claim_asset_scale" => StarToken::ClaimAssetScale,
     }
 }
 
@@ -38,6 +39,7 @@ StarDatum:StarData = {
                 StarField::AssetLocation(a) => star_data.asset_location = a,
                 StarField::ClaimAssetLocation(c) => star_data.claim_asset_location = c,
                 StarField::Scale(s) => star_data.scale = s,
+                StarField::ClaimAssetScale(a) => star_data.claim_asset_scale = a,
             }
         }
         star_data
@@ -49,6 +51,7 @@ StarField:StarField = {
     <a:AssetLocation> => StarField::AssetLocation(a),
     <c:ClaimAssetLocation> => StarField::ClaimAssetLocation(c),
     <s:Scale> => StarField::Scale(s),
+    <a:ClaimAssetScale> => StarField::ClaimAssetScale(a),
 }
 
 AssetLocation:String = {
@@ -61,4 +64,8 @@ ClaimAssetLocation:String = {
 
 Scale:Decimal = {
     "scale" "=" <n:"decimal_number"> => n,
+}
+
+ClaimAssetScale:Decimal = {
+    "claim_asset_scale" "=" <n:"decimal_number"> => n,
 }

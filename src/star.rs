@@ -32,6 +32,8 @@ pub enum StarToken {
 
     #[token("scale")]
     Scale,
+    #[token("claim_asset_scale")]
+    ClaimAssetScale,
 }
 
 impl fmt::Display for StarToken {
@@ -47,12 +49,14 @@ pub struct StarData {
     pub asset_location: String,
     pub claim_asset_location: String,
     pub scale: Decimal,
+    pub claim_asset_scale: Decimal,
 }
 
 pub enum StarField {
     AssetLocation(String),
     ClaimAssetLocation(String),
     Scale(Decimal),
+    ClaimAssetScale(Decimal),
 }
 
 impl<'s> DataParser<'s> for StarData {
