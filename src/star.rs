@@ -24,6 +24,13 @@ pub enum StarToken {
     #[token("}")]
     RightCurly,
 
+    #[token("x")]
+    X,
+    #[token("y")]
+    Y,
+    #[token("z")]
+    Z,
+
     #[token("asset_location")]
     AssetLocation,
 
@@ -34,6 +41,12 @@ pub enum StarToken {
     Scale,
     #[token("claim_asset_scale")]
     ClaimAssetScale,
+
+    #[token("claim_asset_offset")]
+    ClaimAssetOffset,
+
+    #[token("claim_asset_field")]
+    ClaimAssetField,
 }
 
 impl fmt::Display for StarToken {
@@ -50,6 +63,14 @@ pub struct StarData {
     pub claim_asset_location: String,
     pub scale: Decimal,
     pub claim_asset_scale: Decimal,
+    pub asset_offset: ClaimAssetOffset,
+}
+
+#[derive(Clone, Default, Debug)]
+pub struct ClaimAssetOffset {
+    pub x: Decimal,
+    pub y: Decimal,
+    pub z: Decimal,
 }
 
 pub enum StarField {
@@ -57,6 +78,13 @@ pub enum StarField {
     ClaimAssetLocation(String),
     Scale(Decimal),
     ClaimAssetScale(Decimal),
+    ClaimAssetOffset(ClaimAssetOffset),
+}
+
+pub enum OffsetField {
+    X(Decimal),
+    Y(Decimal),
+    Z(Decimal),
 }
 
 impl<'s> DataParser<'s> for StarData {

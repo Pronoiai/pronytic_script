@@ -1,4 +1,4 @@
-use crate::star::{StarData,StarField,StarToken};
+use crate::star::{ClaimAssetOffset,OffsetField,StarData,StarField,StarToken};
 
 use rust_decimal::prelude::*;
 
@@ -16,11 +16,16 @@ extern {
         "{" => StarToken::LeftCurly,
         "}" => StarToken::RightCurly,
 
+        "x" => StarToken::X,
+        "y" => StarToken::Y,
+        "z" => StarToken::Z,
 
         "asset_location" => StarToken::AssetLocation,
         "claim_asset_location" => StarToken::ClaimAssetLocation,
         "scale" => StarToken::Scale,
         "claim_asset_scale" => StarToken::ClaimAssetScale,
+        "claim_asset_offset" => StarToken::ClaimAssetOffset,
+        "claim_asset_field" => StarToken::ClaimAssetField,
     }
 }
 
@@ -40,6 +45,7 @@ StarDatum:StarData = {
                 StarField::ClaimAssetLocation(c) => star_data.claim_asset_location = c,
                 StarField::Scale(s) => star_data.scale = s,
                 StarField::ClaimAssetScale(a) => star_data.claim_asset_scale = a,
+                StarField::ClaimAssetOffset(a) => star_data.asset_offset = a,
             }
         }
         star_data
@@ -52,6 +58,7 @@ StarField:StarField = {
     <c:ClaimAssetLocation> => StarField::ClaimAssetLocation(c),
     <s:Scale> => StarField::Scale(s),
     <a:ClaimAssetScale> => StarField::ClaimAssetScale(a),
+    <a:ClaimAssetOffset> => StarField::ClaimAssetOffset(a),
 }
 
 AssetLocation:String = {
@@ -68,4 +75,39 @@ Scale:Decimal = {
 
 ClaimAssetScale:Decimal = {
     "claim_asset_scale" "=" <n:"decimal_number"> => n,
+}
+
+ClaimAssetOffset:ClaimAssetOffset = {
+    "claim_asset_field" "=" "{"
+        <fields:OffsetField*>
+    "}" =>{
+        let mut offset_field = ClaimAssetOffset::default();
+
+        for f in fields {
+            match f {
+                OffsetField::X(x) => offset_field.x = x,
+                OffsetField::Y(y) => offset_field.y = y,
+                OffsetField::Z(z) => offset_field.z = z,
+            }
+        }
+        offset_field
+    }
+}
+
+OffsetField:OffsetField = {
+    <x:X> => OffsetField::X(x),
+    <y:Y> => OffsetField::Y(y),
+    <z:Z> => OffsetField::Z(z),
+}
+
+X:Decimal = {
+    "x" "=" <n:"decimal_number"> => n,
+}
+
+Y:Decimal = {
+    "y" "=" <n:"decimal_number"> => n,
+}
+
+Z:Decimal = {
+    "z" "=" <n:"decimal_number"> => n,
 }
