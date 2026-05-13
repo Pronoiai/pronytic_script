@@ -1,4 +1,4 @@
-use rust_decimal::Decimal;
+use rust_decimal::prelude::*;
 use crate::planet_types::PlanetTypeData;
 use crate::planet_types::PlanetClass;
 use crate::planet_types::{Action,Branch,Condition,Field,
