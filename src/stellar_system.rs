@@ -98,6 +98,38 @@ pub enum StellarToken {
 
     #[token("capital")]
     Capital,
+
+    #[token("buildings")]
+    Buildings,
+
+    #[token("level")]
+    Level,
+
+    #[token("orbital")]
+    Orbital,
+
+    #[token("owner")]
+    Owner,
+
+    #[token("none")]
+    None,
+
+    #[token("human")]
+    Human,
+    #[token("homeworld")]
+    Homeworld,
+
+    #[token("colony")]
+    Colony,
+
+    #[token("pops")]
+    Pops,
+
+    #[token("count")]
+    Count,
+
+    #[token("designation")]
+    Designation,
 }
 
 impl fmt::Display for StellarToken {
@@ -114,11 +146,20 @@ pub struct StellarData {
     pub star_data: StarData,
     pub orbiting: Vec<StellarObject>,
     pub surveyed: bool,
+    pub owner: StarOwner,
+}
+
+#[derive(Clone, Default, Debug)]
+pub enum StarOwner {
+    #[default]
+    Unowned,
+    Human,
+    Homeworld,
 }
 
 #[derive(Clone, Debug)]
 //Majority case is the large data structure variant and it will be cleaned up on program startup
-// #[allow(clippy::large_enum_variant)]
+#[allow(clippy::large_enum_variant)]
 pub enum StellarObject {
     PlanetData(PlanetData),
     //Dwarf planets
@@ -155,6 +196,9 @@ pub struct PlanetData {
     pub ring: bool,
 
     pub moons: Vec<MoonData>,
+    pub orbital: Option<Orbital>,
+    pub buildings: Vec<String>,
+    pub colony: Option<ColonyDetails>,
 }
 
 impl Default for PlanetData {
@@ -173,6 +217,9 @@ impl Default for PlanetData {
             ring: Default::default(),
             capital: Default::default(),
             moons: Default::default(),
+            orbital: Default::default(),
+            buildings: Default::default(),
+            colony: Default::default(),
         }
     }
 }
@@ -193,6 +240,9 @@ pub struct MoonData {
 
     pub natural_resources: Vec<NaturalResource>,
     pub capital: bool,
+    pub buildings: Vec<String>,
+    pub orbital: Option<Orbital>,
+    pub colony: Option<ColonyDetails>,
 }
 
 #[derive(Clone, Default, Debug)]
@@ -201,10 +251,30 @@ pub struct NaturalResource {
     pub amount: Decimal,
 }
 
+#[derive(Clone, Default, Debug)]
+pub struct Orbital {
+    pub orbital_level: u16,
+    pub buildings: Vec<String>,
+}
+
+#[derive(Clone, Default, Debug)]
+pub struct ColonyDetails {
+    pub designation: String,
+    pub colony_pops: Vec<ColonyPop>,
+}
+
+#[derive(Clone, Debug)]
+pub struct ColonyPop {
+    pub count: u16,
+    pub star_type: String,
+}
+
+#[allow(clippy::large_enum_variant)]
 pub enum StellarField {
     StarData(StarData),
     Orbiting(StellarObject),
     Surveyed(bool),
+    Owner(StarOwner),
 }
 
 pub enum StarField {
@@ -214,6 +284,7 @@ pub enum StarField {
     StarType(String),
 }
 
+#[allow(clippy::large_enum_variant)]
 pub enum PlanetField {
     Name(String),
     AssetLocation(String),
@@ -228,6 +299,9 @@ pub enum PlanetField {
     Ring,
     Moon(MoonData),
     Capital(bool),
+    Buildings(Vec<String>),
+    Orbital(Orbital),
+    Colony(ColonyDetails),
 }
 
 pub enum MoonField {
@@ -242,6 +316,18 @@ pub enum MoonField {
     Breathability(Decimal),
     NaturalResources(Vec<NaturalResource>),
     Capital(bool),
+    Buildings(Vec<String>),
+    Orbital(Orbital),
+    Colony(ColonyDetails),
+}
+
+pub enum ColonyField {
+    Designation(String),
+    Population(Vec<ColonyPop>),
+}
+
+pub enum OrbitalField {
+    Buildings(Vec<String>),
 }
 
 impl<'s> DataParser<'s> for StellarData {

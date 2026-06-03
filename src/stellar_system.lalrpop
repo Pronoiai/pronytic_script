@@ -1,4 +1,4 @@
-use crate::stellar_system::{MoonData,MoonField,NaturalResource,PlanetData,PlanetField,StarData,StarField,StellarData,StellarField,StellarObject,StellarToken,Temperature};
+use crate::stellar_system::{ColonyDetails,ColonyField,ColonyPop,MoonData,MoonField,NaturalResource,Orbital,PlanetData,PlanetField,StarData,StarField,StarOwner,StellarData,StellarField,StellarObject,StellarToken,Temperature};
 use rust_decimal::prelude::*;
 
 grammar;
@@ -6,7 +6,7 @@ grammar;
 extern {
     type Location = usize;
     type Error = String;
-    
+
     enum StellarToken {
         "true" => StellarToken::True,
         "false" => StellarToken::False,
@@ -17,7 +17,7 @@ extern {
         "=" => StellarToken::Equal,
 
         ":" => StellarToken::Colon,
-        
+
         "{" => StellarToken::LeftCurly,
         "}" => StellarToken::RightCurly,
 
@@ -57,6 +57,26 @@ extern {
 
         "capital" => StellarToken::Capital,
 
+        "buildings" => StellarToken::Buildings,
+
+        "level" => StellarToken::Level,
+
+        "orbital" => StellarToken::Orbital,
+
+        "owner" => StellarToken::Owner,
+
+        "none" => StellarToken::None,
+        "human" => StellarToken::Human,
+        "homeworld" => StellarToken::Homeworld,
+
+        "colony" => StellarToken::Colony,
+
+        "pops" => StellarToken::Pops,
+
+        "count" => StellarToken::Count,
+
+        "designation" => StellarToken::Designation,
+
     }
 }
 
@@ -76,6 +96,7 @@ StellarDatum:StellarData = {
                 StellarField::StarData(s) => stellar_data.star_data = s,
                 StellarField::Orbiting(o) => stellar_data.orbiting.push(o),
                 StellarField::Surveyed(b) => stellar_data.surveyed = b,
+                StellarField::Owner(o) => stellar_data.owner = o,
             }
         }
         stellar_data
@@ -86,6 +107,7 @@ StellarField:StellarField = {
     <s:StarData> => StellarField::StarData(s),
     <o:Orbiting> => StellarField::Orbiting(o),
     <s:Surveyed> => StellarField::Surveyed(s),
+    <o:Owner> => StellarField::Owner(o),
 }
 
 StarData:StarData = {
@@ -138,6 +160,9 @@ Planet:PlanetData = {
                 PlanetField::Ring => planet_data.ring = true,
                 PlanetField::Moon(m) => planet_data.moons.push(m),
                 PlanetField::Capital(c) => planet_data.capital = c,
+                PlanetField::Buildings(b) => planet_data.buildings = b,
+                PlanetField::Orbital(o) => planet_data.orbital = Some(o),
+                PlanetField::Colony(c) => planet_data.colony = Some(c),
             }
         }
         planet_data
@@ -158,6 +183,10 @@ PlanetField:PlanetField = {
     <"ring"> => PlanetField::Ring,
     <m:Moon> => PlanetField::Moon(m),
     <c:Capital> => PlanetField::Capital(c),
+    <b:Buildings> => PlanetField::Buildings(b),
+    <o:Orbital> => PlanetField::Orbital(o),
+    <c:Colony> => PlanetField::Colony(c),
+
 }
 
 
@@ -177,8 +206,11 @@ Moon:MoonData = {
                 MoonField::Breathability(b) => moon_data.breathability = b,
                 MoonField::NaturalResources(n) => moon_data.natural_resources = n,
                 MoonField::Capital(c) => moon_data.capital = c,
+                MoonField::Buildings(b) => moon_data.buildings = b,
+                MoonField::Orbital(o) => moon_data.orbital = Some(o),
+                MoonField::Colony(c) => moon_data.colony = Some(c),
             }
-        } 
+        }
         moon_data
     }
 }
@@ -195,6 +227,10 @@ MoonField:MoonField = {
     <b:Breathability> => MoonField::Breathability(b),
     <n:NaturalResources> => MoonField::NaturalResources(n),
     <c:Capital> => MoonField::Capital(c),
+    <b:Buildings> => MoonField::Buildings(b),
+    <o:Orbital> => MoonField::Orbital(o),
+    <c:Colony> => MoonField::Colony(c),
+
 }
 
 StarType:String = {
@@ -207,6 +243,12 @@ PlanetType:String = {
 
 AssetLocation:String = {
     "asset_location" "=" <s:"string"> => s,
+}
+
+Owner:StarOwner = {
+    "owner" "=" "none" => StarOwner::Unowned,
+    "owner" "=" "human" => StarOwner::Human,
+    "owner" "=" "homeworld" => StarOwner::Homeworld,
 }
 
 Size:u16 = {
@@ -258,5 +300,48 @@ NaturalResource:NaturalResource = {
 Capital:bool = {
     "capital" "=" "true" => true,
     "capital" "=" "false" => false,
-    
+}
+
+Orbital:Orbital = {
+    "orbital" "=" "{" "level" "=" <n:"number"> <b:Buildings>     "}" => Orbital { orbital_level:n,buildings:b},
+}
+
+Buildings:Vec<String> = {
+    "buildings" "=" "{" <s:"string"*> "}" => s,
+}
+
+Colony:ColonyDetails = {
+    "colony" "=" "{"
+        <fields:ColonyField*>
+     "}" => {
+        let mut details = ColonyDetails::default();
+
+        for f in fields {
+            match f {
+                ColonyField::Designation(d) => details.designation = d,
+                ColonyField::Population(p) => details.colony_pops = p,
+            }
+        }
+        details
+     }
+}
+
+ColonyField:ColonyField = {
+    <d:Designation> => ColonyField::Designation(d),
+    <p:ColonyPops> => ColonyField::Population(p),
+}
+
+Designation:String = {
+    "designation" "=" <s:"string"> => s,
+}
+
+ColonyPops:Vec<ColonyPop> = {
+   "pops" "="  "[" <c:ColonyPopDatum*> "]" => c,
+}
+
+ColonyPopDatum:ColonyPop = {
+   "{" "count" "=" <n:"number"> "star_type" "=" <t:"string"> "}" => ColonyPop {
+        count:n,
+        star_type:t
+    }
 }
