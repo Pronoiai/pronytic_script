@@ -255,6 +255,7 @@ pub struct NaturalResource {
 pub struct Orbital {
     pub orbital_level: u16,
     pub buildings: Vec<String>,
+    pub colony_details: ColonyDetails,
 }
 
 #[derive(Clone, Default, Debug)]
@@ -328,6 +329,8 @@ pub enum ColonyField {
 
 pub enum OrbitalField {
     Buildings(Vec<String>),
+    Level(u16),
+    ColonyField(ColonyDetails),
 }
 
 impl<'s> DataParser<'s> for StellarData {

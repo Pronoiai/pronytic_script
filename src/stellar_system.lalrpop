@@ -1,4 +1,6 @@
-use crate::stellar_system::{ColonyDetails,ColonyField,ColonyPop,MoonData,MoonField,NaturalResource,Orbital,PlanetData,PlanetField,StarData,StarField,StarOwner,StellarData,StellarField,StellarObject,StellarToken,Temperature};
+use crate::stellar_system::{ColonyDetails,ColonyField,ColonyPop,MoonData,MoonField,NaturalResource,
+Orbital,OrbitalField,PlanetData,PlanetField,StarData,StarField,StarOwner,StellarData,StellarField,StellarObject,
+StellarToken,Temperature};
 use rust_decimal::prelude::*;
 
 grammar;
@@ -303,11 +305,31 @@ Capital:bool = {
 }
 
 Orbital:Orbital = {
-    "orbital" "=" "{" "level" "=" <n:"number"> <b:Buildings>     "}" => Orbital { orbital_level:n,buildings:b},
+    "orbital" "=" "{" <fields:OrbitalField*> "}" => {
+        let mut orbital = Orbital::default();
+        for f in fields {
+            match f {
+                OrbitalField::Buildings(b) => orbital.buildings = b,
+                OrbitalField::Level(l) => orbital.orbital_level = l,
+                OrbitalField::ColonyField(c) => orbital.colony_details = c,
+            }
+        }
+        orbital
+    },
+}
+
+OrbitalField:OrbitalField = {
+    <b:Buildings> => OrbitalField::Buildings(b),
+    <l:Level> => OrbitalField::Level(l),
+    <c:Colony> => OrbitalField::ColonyField(c),
 }
 
 Buildings:Vec<String> = {
     "buildings" "=" "{" <s:"string"*> "}" => s,
+}
+
+Level:u16 = {
+    "level" "=" <n:"number"> =>n,
 }
 
 Colony:ColonyDetails = {
