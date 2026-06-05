@@ -68,6 +68,9 @@ pub enum StellarToken {
     #[token("star_type")]
     StarType,
 
+    #[token("stapledon")]
+    Stapledon,
+
     #[token("planet_type")]
     PlanetType,
 
@@ -173,6 +176,7 @@ pub struct StarData {
     pub size: u16,
     pub temperature: Temperature,
     pub star_type: String,
+    pub stapledon_level: u16,
 }
 
 #[derive(Clone, Debug)]
@@ -283,6 +287,7 @@ pub enum StarField {
     AssetLocation(String),
     Temperature(Temperature),
     StarType(String),
+    Stapledon(u16),
 }
 
 #[allow(clippy::large_enum_variant)]

@@ -42,6 +42,8 @@ extern {
         "name" => StellarToken::Name,
 
         "star_type" => StellarToken::StarType,
+        "stapledon" => StellarToken::Stapledon,
+
         "planet_type" => StellarToken::PlanetType,
         "temperature_celsius" => StellarToken::TemperatureCelsius,
         "temperature_kelvin" => StellarToken::TemperatureKelvin,
@@ -121,6 +123,7 @@ StarData:StarData = {
                 StarField::Name(n) => star_data.name = n,
                 StarField::Temperature(t) => star_data.temperature = t,
                 StarField::StarType(s) => star_data.star_type = s,
+                StarField::Stapledon(s) => star_data.stapledon_level = s,
             }
         }
         star_data
@@ -132,6 +135,7 @@ StarField:StarField = {
     <n:Name> => StarField::Name(n),
     <t:Temperature> => StarField::Temperature(t),
     <s:StarType> => StarField::StarType(s),
+    <s:Stapledon> => StarField::Stapledon(s),
 }
 
 Orbiting:StellarObject = {
@@ -257,6 +261,9 @@ Size:u16 = {
     "size" "=" <n:"number"> => n,
 }
 
+Stapledon:u16 = {
+    "stapledon" "=" <n:"number"> => n,
+}
 
 Surveyed:bool = {
     "surveyed" "=" "false" => false,
