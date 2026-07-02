@@ -182,56 +182,61 @@ pub struct StarData {
     pub stapledon_level: u16,
 }
 
-#[derive(Clone, Debug)]
-pub struct PlanetData {
-    pub name: String,
+macro_rules! create_default {
+    ($title:ident {$(pub $field:ident : $ty:ty),*$(,)*}) => {
+    #[derive(Clone, Debug)]
+        pub struct $title {
+            $(pub $field: $ty,)*
+        }
 
-    pub asset_location: String,
-    pub size: u16,
-
-    pub planet_type: String,
-    pub magnetosphere: Decimal,
-    pub atmosphere: Decimal,
-    pub temperature: Temperature,
-    pub water: Decimal,
-    pub breathability: Decimal,
-
-    pub natural_resources: Vec<NaturalResource>,
-
-    pub capital: bool,
-
-    pub ring: bool,
-
-    pub moons: Vec<MoonData>,
-    pub orbital: Option<Orbital>,
-    pub buildings: Vec<String>,
-    pub colony: Option<ColonyDetails>,
-    pub shipyard: Option<Shipyard>,
-}
-
-impl Default for PlanetData {
-    fn default() -> Self {
-        Self {
-            name: Default::default(),
-            asset_location: Default::default(),
-            size: 10,
-            planet_type: Default::default(),
-            magnetosphere: Default::default(),
-            atmosphere: Default::default(),
-            temperature: Default::default(),
-            water: Default::default(),
-            breathability: Default::default(),
-            natural_resources: Default::default(),
-            ring: Default::default(),
-            capital: Default::default(),
-            moons: Default::default(),
-            orbital: Default::default(),
-            buildings: Default::default(),
-            colony: Default::default(),
-            shipyard: Default::default(),
+        impl Default for $title {
+            fn default() -> Self {
+                PlanetData {
+                    $(
+                        $field: field_stuff!($field),
+                    )*
+                }
+            }
         }
     }
 }
+
+macro_rules! field_stuff {
+    (size) => {
+        10
+    };
+    ($other:ident) => {
+        Default::default()
+    };
+}
+
+create_default!( PlanetData
+    {
+        pub name: String,
+
+        pub asset_location: String,
+        pub size: u16,
+
+        pub planet_type: String,
+        pub magnetosphere: Decimal,
+        pub atmosphere: Decimal,
+        pub temperature: Temperature,
+        pub water: Decimal,
+        pub breathability: Decimal,
+
+        pub natural_resources: Vec<NaturalResource>,
+
+        pub capital: bool,
+
+        pub ring: bool,
+
+        pub moons: Vec<MoonData>,
+        pub orbital: Option<Orbital>,
+        pub buildings: Vec<String>,
+        pub colony: Option<ColonyDetails>,
+        pub shipyard: Option<Shipyard>,
+
+});
 
 #[derive(Clone, Default, Debug)]
 pub struct MoonData {
