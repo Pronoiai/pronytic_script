@@ -1,6 +1,6 @@
 use crate::stellar_system::{ColonyDetails,ColonyField,ColonyPop,MoonData,MoonField,NaturalResource,
-Orbital,OrbitalField,PlanetData,PlanetField,StarData,StarField,StarOwner,StellarData,StellarField,StellarObject,
-StellarToken,Temperature};
+Orbital,OrbitalField,PlanetData,PlanetField,Shipyard,ShipyardField,StarData,StarField,StarOwner,
+StellarData,StellarField,StellarObject, StellarToken,Temperature};
 use rust_decimal::prelude::*;
 
 grammar;
@@ -80,6 +80,8 @@ extern {
         "count" => StellarToken::Count,
 
         "designation" => StellarToken::Designation,
+
+        "shipyard" => StellarToken::Shipyard,
 
     }
 }
@@ -169,6 +171,7 @@ Planet:PlanetData = {
                 PlanetField::Buildings(b) => planet_data.buildings = b,
                 PlanetField::Orbital(o) => planet_data.orbital = Some(o),
                 PlanetField::Colony(c) => planet_data.colony = Some(c),
+                PlanetField::Shipyard(s) => planet_data.shipyard = Some(s),
             }
         }
         planet_data
@@ -192,6 +195,7 @@ PlanetField:PlanetField = {
     <b:Buildings> => PlanetField::Buildings(b),
     <o:Orbital> => PlanetField::Orbital(o),
     <c:Colony> => PlanetField::Colony(c),
+    <s:Shipyard> => PlanetField::Shipyard(s),
 
 }
 
@@ -215,6 +219,7 @@ Moon:MoonData = {
                 MoonField::Buildings(b) => moon_data.buildings = b,
                 MoonField::Orbital(o) => moon_data.orbital = Some(o),
                 MoonField::Colony(c) => moon_data.colony = Some(c),
+                MoonField::Shipyard(s) => moon_data.shipyard = Some(s),
             }
         }
         moon_data
@@ -236,6 +241,7 @@ MoonField:MoonField = {
     <b:Buildings> => MoonField::Buildings(b),
     <o:Orbital> => MoonField::Orbital(o),
     <c:Colony> => MoonField::Colony(c),
+    <s:Shipyard> => MoonField::Shipyard(s),
 
 }
 
@@ -373,4 +379,23 @@ ColonyPopDatum:ColonyPop = {
         count:n,
         star_type:t
     }
+}
+
+Shipyard:Shipyard = {
+    "shipyard" "=" "{"
+        <fields:ShipyardField*>
+    "}" => {
+        let mut shipyard = Shipyard::default();
+
+        for f in fields{
+            match f {
+                ShipyardField::Level(l) => shipyard.level = l,
+            }
+        }
+        shipyard
+    }
+}
+
+ShipyardField:ShipyardField = {
+    <l:Level> => ShipyardField::Level(l),
 }

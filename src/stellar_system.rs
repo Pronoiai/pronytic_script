@@ -133,6 +133,9 @@ pub enum StellarToken {
 
     #[token("designation")]
     Designation,
+
+    #[token("shipyard")]
+    Shipyard,
 }
 
 impl fmt::Display for StellarToken {
@@ -203,6 +206,7 @@ pub struct PlanetData {
     pub orbital: Option<Orbital>,
     pub buildings: Vec<String>,
     pub colony: Option<ColonyDetails>,
+    pub shipyard: Option<Shipyard>,
 }
 
 impl Default for PlanetData {
@@ -224,6 +228,7 @@ impl Default for PlanetData {
             orbital: Default::default(),
             buildings: Default::default(),
             colony: Default::default(),
+            shipyard: Default::default(),
         }
     }
 }
@@ -247,6 +252,7 @@ pub struct MoonData {
     pub buildings: Vec<String>,
     pub orbital: Option<Orbital>,
     pub colony: Option<ColonyDetails>,
+    pub shipyard: Option<Shipyard>,
 }
 
 #[derive(Clone, Default, Debug)]
@@ -272,6 +278,11 @@ pub struct ColonyDetails {
 pub struct ColonyPop {
     pub count: u16,
     pub star_type: String,
+}
+
+#[derive(Clone, Default, Debug)]
+pub struct Shipyard {
+    pub level: u16,
 }
 
 #[allow(clippy::large_enum_variant)]
@@ -308,6 +319,7 @@ pub enum PlanetField {
     Buildings(Vec<String>),
     Orbital(Orbital),
     Colony(ColonyDetails),
+    Shipyard(Shipyard),
 }
 
 pub enum MoonField {
@@ -325,6 +337,7 @@ pub enum MoonField {
     Buildings(Vec<String>),
     Orbital(Orbital),
     Colony(ColonyDetails),
+    Shipyard(Shipyard),
 }
 
 pub enum ColonyField {
@@ -336,6 +349,10 @@ pub enum OrbitalField {
     Buildings(Vec<String>),
     Level(u16),
     ColonyField(ColonyDetails),
+}
+
+pub enum ShipyardField {
+    Level(u16),
 }
 
 impl<'s> DataParser<'s> for StellarData {
