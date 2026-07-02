@@ -184,7 +184,7 @@ pub struct StarData {
 
 macro_rules! create_default {
     ($title:ident {$(pub $field:ident : $ty:ty),*$(,)*}) => {
-    #[derive(Clone, Debug)]
+        #[derive(Clone, Debug)]
         pub struct $title {
             $(pub $field: $ty,)*
         }
