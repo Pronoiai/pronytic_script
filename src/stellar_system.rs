@@ -193,21 +193,15 @@ macro_rules! create_default {
             fn default() -> Self {
                 PlanetData {
                     $(
-                        $field: field_stuff!($field),
+                        $field: create_default!(@internal $field),
                     )*
                 }
             }
         }
-    }
-}
+    };
 
-macro_rules! field_stuff {
-    (size) => {
-        10
-    };
-    ($other:ident) => {
-        Default::default()
-    };
+    (@internal size) => { 10 };
+    (@internal $other:ident) => { Default::default() };
 }
 
 create_default!( PlanetData
