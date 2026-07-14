@@ -125,6 +125,9 @@ pub enum PlanetTypeToken {
     #[token("stored_number")]
     StoredNumber,
 
+    #[token("click_sound")]
+    ClickSound,
+
     #[token("rand_of_string")]
     RandomOfString,
 }
@@ -139,6 +142,7 @@ lalrpop_mod!(pub planet_types);
 #[derive(Debug, Clone)]
 pub enum Field {
     AssetLocation(String),
+    ClickLocation(String),
     GoodsAbundance(Vec<GoodAbundance>),
     PlanetClass(PlanetClass),
     Setup(Branch),
@@ -153,6 +157,7 @@ pub struct PlanetTypeData {
     pub asset_location: String,
     pub setup_conditions: Vec<Branch>,
     pub terraform_conditions: Vec<Branch>,
+    pub click_location: String,
 }
 
 impl<'s> DataParser<'s> for PlanetTypeData {

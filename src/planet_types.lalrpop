@@ -72,6 +72,8 @@ extern {
         "atmospheric" => PlanetTypeToken::Atmospheric,
         "gas" => PlanetTypeToken::Gas,
 
+        "click_sound" => PlanetTypeToken::ClickSound,
+
         "stored" => PlanetTypeToken::Stored,
         "stored_number" => PlanetTypeToken::StoredNumber,
     }
@@ -92,6 +94,7 @@ TypesItem :PlanetTypeData = {
          for f in fields.into_iter() {
             match f {
                 Field::AssetLocation(a) => planet_type_data.asset_location = a,
+                Field::ClickLocation(l) => planet_type_data.click_location = l,
                 Field::Setup(s) => planet_type_data.setup_conditions.push(s),
                 Field::PlanetClass(p) => planet_type_data.planet_class = p,
                 Field::GoodsAbundance(g) => planet_type_data.abundances = g,
@@ -228,6 +231,7 @@ Actions:Action = {
 
 Field: Field = {
     <a:AssetLocation> =>Field::AssetLocation(a),
+    <c:ClickLocation> =>Field::ClickLocation(c),
     <g:GoodsAbundance> => Field::GoodsAbundance(g),
     <p:PlanetClass> => Field::PlanetClass(p),
     <s:Setup> => Field::Setup(s),
@@ -237,6 +241,11 @@ Field: Field = {
 AssetLocation: String = {
     "set_asset" "=" <id:"name"> => id.to_string()
 }
+
+ClickLocation:String = {
+    "click_sound" "=" <id:"name"> => id.to_string()
+}
+
 PlanetType:String = {
     "set_planet_type" "=" <id:"name"> => id.to_string()
 }
