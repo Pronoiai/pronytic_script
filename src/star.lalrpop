@@ -26,6 +26,9 @@ extern {
         "claim_asset_scale" => StarToken::ClaimAssetScale,
         "claim_asset_offset" => StarToken::ClaimAssetOffset,
         "claim_asset_field" => StarToken::ClaimAssetField,
+
+        "click_sound" => StarToken::ClickSound,
+
     }
 }
 
@@ -46,6 +49,7 @@ StarDatum:StarData = {
                 StarField::Scale(s) => star_data.scale = s,
                 StarField::ClaimAssetScale(a) => star_data.claim_asset_scale = a,
                 StarField::ClaimAssetOffset(a) => star_data.asset_offset = a,
+                StarField::ClickLocation(c) => star_data.click_location = c,
             }
         }
         star_data
@@ -59,6 +63,7 @@ StarField:StarField = {
     <s:Scale> => StarField::Scale(s),
     <a:ClaimAssetScale> => StarField::ClaimAssetScale(a),
     <a:ClaimAssetOffset> => StarField::ClaimAssetOffset(a),
+    <c:ClickLocation> => StarField::ClickLocation(c),
 }
 
 AssetLocation:String = {
@@ -110,4 +115,8 @@ Y:Decimal = {
 
 Z:Decimal = {
     "z" "=" <n:"decimal_number"> => n,
+}
+
+ClickLocation:String = {
+    "click_sound" "=" <id:"string"> => id.to_string()
 }

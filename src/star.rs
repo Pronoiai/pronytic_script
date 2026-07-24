@@ -47,6 +47,9 @@ pub enum StarToken {
 
     #[token("claim_asset_field")]
     ClaimAssetField,
+
+    #[token("click_sound")]
+    ClickSound,
 }
 
 impl fmt::Display for StarToken {
@@ -64,6 +67,7 @@ pub struct StarData {
     pub scale: Decimal,
     pub claim_asset_scale: Decimal,
     pub asset_offset: ClaimAssetOffset,
+    pub click_location: String,
 }
 
 #[derive(Clone, Default, Debug)]
@@ -79,6 +83,7 @@ pub enum StarField {
     Scale(Decimal),
     ClaimAssetScale(Decimal),
     ClaimAssetOffset(ClaimAssetOffset),
+    ClickLocation(String),
 }
 
 pub enum OffsetField {
