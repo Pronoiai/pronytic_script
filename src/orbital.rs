@@ -39,8 +39,6 @@ pub enum OrbitalToken {
 
     #[token("name")]
     Name,
-    #[token("asset_location")]
-    AssetLocation,
 
     #[token("consumes")]
     Consumes,
@@ -67,6 +65,20 @@ pub enum OrbitalToken {
     Water,
     #[token("breathability")]
     Breathability,
+
+    #[token("placement")]
+    Placement,
+
+    #[token("right")]
+    Right,
+    #[token("up")]
+    Up,
+    #[token("back")]
+    Back,
+    #[token("scale")]
+    Scale,
+    #[token("path")]
+    Path,
 }
 
 impl fmt::Display for OrbitalToken {
@@ -80,9 +92,10 @@ lalrpop_mod!(pub orbital);
 pub struct OrbitalData {
     pub level: u8,
     pub name: String,
-    pub asset_location: String,
 
     pub costs: Vec<GoodConsumes>,
+
+    pub placement: Placement,
 
     pub time: u8,
     pub building_limit: u8,
@@ -95,11 +108,32 @@ pub struct OrbitalData {
     pub breathability: Decimal,
 }
 
+#[derive(Clone, Debug)]
+pub struct Placement {
+    pub right: f32,
+    pub up: f32,
+    pub back: f32,
+
+    pub scale: f32,
+    pub asset_location: String,
+}
+
+impl Default for Placement {
+    fn default() -> Self {
+        Self {
+            right: Default::default(),
+            up: Default::default(),
+            back: Default::default(),
+            scale: 1.0,
+            asset_location: Default::default(),
+        }
+    }
+}
+
 /// Differentiates between each field when parsing
 /// This allows fields to be done in arbitrary order in lalrpop files
 pub enum Field {
     Name(String),
-    AssetLocation(String),
     Consumes(Vec<GoodConsumes>),
     Time(u8),
     BuildingLimit(u8),
@@ -108,6 +142,15 @@ pub enum Field {
     Water(Decimal),
     Temperature(Temperature),
     Breathability(Decimal),
+    Placement(Placement),
+}
+
+pub enum PlacementField {
+    Right(f32),
+    Up(f32),
+    Back(f32),
+    Scale(f32),
+    Path(String),
 }
 
 impl<'s> DataParser<'s> for OrbitalData {

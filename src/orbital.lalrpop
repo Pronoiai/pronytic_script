@@ -1,6 +1,6 @@
 use rust_decimal::prelude::*;
 
-use crate::orbital::{Field,OrbitalData,OrbitalToken,Temperature};
+use crate::orbital::{Field,OrbitalData,OrbitalToken,Placement,PlacementField,Temperature};
 
 use crate::common::GoodConsumes;
 
@@ -25,7 +25,6 @@ extern {
         "]" => OrbitalToken::RightSquare,
 
         "name" => OrbitalToken::Name,
-        "asset_location" => OrbitalToken::AssetLocation,
 
         "good_id" => OrbitalToken::GoodId,
 
@@ -44,6 +43,15 @@ extern {
 
         "water" => OrbitalToken::Water,
         "breathability" => OrbitalToken::Breathability,
+
+        "placement" => OrbitalToken::Placement,
+
+        "right" => OrbitalToken::Right,
+        "up" => OrbitalToken::Up,
+        "back" => OrbitalToken::Back,
+        "scale" => OrbitalToken::Scale,
+        "path" => OrbitalToken::Path,
+
     }
 
 }
@@ -61,7 +69,6 @@ OrbitalDatum:OrbitalData = {
         for f in fields {
             match f {
                 Field::Name(n) => orbital.name = n,
-                Field::AssetLocation(a) => orbital.asset_location = a,
                 Field::Consumes(c) => orbital.costs = c,
                 Field::Time(t) => orbital.time = t,
                 Field::BuildingLimit(l) => orbital.building_limit = l,
@@ -70,6 +77,7 @@ OrbitalDatum:OrbitalData = {
                 Field::Water(w) => orbital.water = w,
                 Field::Temperature(t) => orbital.temperature = t,
                 Field::Breathability(b) => orbital.breathability = b,
+                Field::Placement(p) => orbital.placement = p,
             }
         }
         orbital
@@ -78,7 +86,6 @@ OrbitalDatum:OrbitalData = {
 
 OrbitalField:Field ={
     <n:Name> => Field::Name(n),
-    <a:AssetLocation> => Field::AssetLocation(a),
     <c:GoodConsumes> => Field::Consumes(c),
     <t:Time> => Field::Time(t),
     <l:BuildingLimit> => Field::BuildingLimit(l),
@@ -87,13 +94,10 @@ OrbitalField:Field ={
     <w:Water> => Field::Water(w),
     <t:Temperature> => Field::Temperature(t),
     <b:Breathability> => Field::Breathability(b),
+    <p:Placement> => Field::Placement(p),
 }
 Name:String = {
     "name" "=" <s:"string"> => s,
-}
-
-AssetLocation:String = {
-    "asset_location" "=" <s:"string"> => s,
 }
 
 Time:u8 = {
@@ -136,4 +140,61 @@ GoodConsume:GoodConsumes = {
             amount:n,
         }
     }
+}
+
+Placement:Placement = {
+    "placement" "=" "{"
+        <fields:PlacementField*>
+    "}" => {
+        let mut placement = Placement::default();
+
+        for f in fields {
+            match f {
+                PlacementField::Right(r) => {
+                    placement.right = r;
+                }
+                PlacementField::Up(u) => {
+                    placement.up = u;
+                }
+                PlacementField::Back(b) => {
+                    placement.back = b;
+                }
+                PlacementField::Scale(s) => {
+                    placement.scale = s;
+                }
+                PlacementField::Path(p) => {
+                    placement.asset_location = p;
+                }
+            }
+        }
+        placement
+    }
+}
+
+PlacementField:PlacementField = {
+    <x:X> => PlacementField::Right(x),
+    <y:Y> => PlacementField::Up(y),
+    <z:Z> => PlacementField::Back(z),
+    <s:Scale> => PlacementField::Scale(s),
+    <p:Path> => PlacementField::Path(p),
+}
+
+X:f32 = {
+    "right" "=" <n:"decimal_number"> => n.to_f32().unwrap(),
+}
+
+Y:f32 = {
+    "up" "=" <n:"decimal_number"> => n.to_f32().unwrap(),
+}
+
+Z:f32 = {
+    "back" "=" <n:"decimal_number"> => n.to_f32().unwrap(),
+}
+
+Scale:f32 = {
+    "scale" "=" <n:"decimal_number"> => n.to_f32().unwrap(),
+}
+
+Path:String ={
+    "path" "=" <s:"string"> => s,
 }
