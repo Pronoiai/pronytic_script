@@ -57,15 +57,6 @@ pub enum OrbitalToken {
     #[token("atmosphere")]
     Atmosphere,
 
-    #[token("temperature_kelvin")]
-    TemperatureKelvin,
-    #[token("temperature_celsius")]
-    TemperatureCelsius,
-    #[token("water")]
-    Water,
-    #[token("breathability")]
-    Breathability,
-
     #[token("placement")]
     Placement,
 
@@ -99,13 +90,6 @@ pub struct OrbitalData {
 
     pub time: u8,
     pub building_limit: u8,
-
-    pub magnetosphere: Decimal,
-    pub atmosphere: Decimal,
-
-    pub temperature: Temperature,
-    pub water: Decimal,
-    pub breathability: Decimal,
 }
 
 #[derive(Clone, Debug)]
@@ -137,11 +121,6 @@ pub enum Field {
     Consumes(Vec<GoodConsumes>),
     Time(u8),
     BuildingLimit(u8),
-    Magnetosphere(Decimal),
-    Atmosphere(Decimal),
-    Water(Decimal),
-    Temperature(Temperature),
-    Breathability(Decimal),
     Placement(Placement),
 }
 
