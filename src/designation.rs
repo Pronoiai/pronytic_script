@@ -52,7 +52,7 @@ pub enum DesignationToken {
     #[token("all_planets")]
     AllPlanets,
 
-    #[token("build_planets")]
+    #[token("planet_filters")]
     PlanetFilters,
 
     #[token("name")]

@@ -92,6 +92,7 @@ Field:Field = {
     <h:Housing> => Field::Housing(h),
     <b:BuildingLimit> => Field::BuildingLimit(b),
     <p:PopulationImpact> => Field::PopulationImpact(p),
+    <p:PlanetFilters> => Field::PlanetFilters(p),
     <p:PrivateBuildings> => Field::PrivateBuildings(p),
     <t:TechRequired> => Field::TechRequired(t),
 }
