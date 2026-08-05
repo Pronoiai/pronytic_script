@@ -6,7 +6,7 @@ use rust_decimal::prelude::*;
 
 use crate::{
     LexicalError,
-    common::{DataParser, GoodConsumes, Temperature},
+    common::{DataParser, GoodConsumes},
 };
 
 #[derive(Logos, Clone, Debug, PartialEq)]
