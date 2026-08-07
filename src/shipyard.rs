@@ -1,4 +1,4 @@
-use std::{fmt, str::FromStr};
+use std::fmt;
 
 use lalrpop_util::lalrpop_mod;
 use logos::{self, Logos};
@@ -12,7 +12,7 @@ use crate::{
 //TODO! this number tokenising is inconsistent with other token types I should change the others to split decimal numbers as consistently
 #[derive(Logos, Clone, Debug, PartialEq)]
 #[logos(skip r"[\s\t\f]+", error = LexicalError)]
-#[logos(skip r"//[^\n\r]*")]
+#[logos(skip r"//[^\n\r]*?")]
 pub enum ShipyardToken {
     #[token("true")]
     True,

@@ -1,7 +1,4 @@
-use std::{
-    fmt::{self},
-    str::FromStr,
-};
+use std::fmt::{self};
 
 use rust_decimal::prelude::*;
 
@@ -133,7 +130,7 @@ pub enum Category {
 
 #[derive(Logos, Clone, Debug, PartialEq)]
 #[logos(skip r"[\s\t\f]+", error = LexicalError)]
-#[logos(skip r"//[^\n\r]*")]
+#[logos(skip r"//[^\n\r]*?")]
 pub enum BuildingToken {
     #[token("true")]
     True,

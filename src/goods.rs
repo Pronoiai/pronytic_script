@@ -1,4 +1,4 @@
-use std::{fmt, str::FromStr};
+use std::fmt;
 
 use lalrpop_util::lalrpop_mod;
 use rust_decimal::Decimal;
@@ -9,7 +9,7 @@ use crate::{LexicalError, common::DataParser};
 
 #[derive(Logos, Clone, Debug, PartialEq)]
 #[logos(skip r"[\s\t\f]+", error = LexicalError)]
-#[logos(skip r"//[^\n\r]*")]
+#[logos(skip r"//[^\n\r]*?")]
 pub enum GoodToken {
     #[token("true")]
     True,
@@ -26,7 +26,7 @@ pub enum GoodToken {
     #[regex(r#""[^"]*""#, |lex| lex.slice().trim_matches('"').to_string())]
     String(String),
 
-    #[regex(r"(-?\d+\.?\d*)", |lex| Decimal::from_str(lex.slice()).expect("parsed_decimal"), priority = 4)]
+    #[regex(r"(-?\d+\.?\d*)", |lex| Decimal::try_from(lex.slice()).expect("parsed_decimal"), priority = 4)]
     DecimalNumber(Decimal),
 
     #[token("icon")]

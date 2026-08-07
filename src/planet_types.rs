@@ -1,4 +1,4 @@
-use std::{fmt, str::FromStr};
+use std::fmt;
 
 use lalrpop_util::lalrpop_mod;
 use rust_decimal::prelude::*;
@@ -12,7 +12,7 @@ use crate::{
 
 #[derive(Logos, Clone, Debug, PartialEq)]
 #[logos(skip r"[\s\t\f]+", error = LexicalError)]
-#[logos(skip r"//[^\n\r]*")]
+#[logos(skip r"//[^\n\r]*?")]
 pub enum PlanetTypeToken {
     #[token("true")]
     True,

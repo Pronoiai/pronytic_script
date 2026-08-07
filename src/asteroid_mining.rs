@@ -13,7 +13,7 @@ use crate::{
 //TODO! this number tokenising is inconsistent with other token types I should change the others to split decimal numbers as consistently
 #[derive(Logos, Clone, Debug, PartialEq)]
 #[logos(skip r"[\s\t\f]+", error = LexicalError)]
-#[logos(skip r"//[^\n\r]*")]
+#[logos(skip r"//[^\n\r]*?")]
 pub enum AsteroidToken {
     #[regex(r#""[^"]*""#, |lex| lex.slice().trim_matches('"').to_string())]
     String(String),

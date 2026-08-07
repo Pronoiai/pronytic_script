@@ -10,9 +10,9 @@ tracing = "0.1.44"
 tracing-subscriber = "0.3.22"
 tracing-test = "0.2.5"
 
-lalrpop = "0.22.2"
-lalrpop-util = { version = "0.22.2", features = [ "unicode"] }
-logos = { version = "0.15.1", features = ["debug"] }
+lalrpop = "0.23.1"
+lalrpop-util = "0.23.1"
+logos = { version = "0.16.1", features = ["debug"] }
 miette = { version = "7.6.0", features = ["fancy"] }
 
 thiserror = "2.0.17"
@@ -20,4 +20,4 @@ regex = "1.12.2"
 
 
 [build-dependencies]
-lalrpop = "0.22.2"
+lalrpop = "0.23.1"
