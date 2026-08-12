@@ -12,7 +12,7 @@ tracing-test = "0.2.5"
 
 lalrpop = "0.23.1"
 lalrpop-util = "0.23.1"
-logos = { version = "0.16.1", features = ["debug"] }
+logos = { version = "0.16.1",  features = [] }
 miette = { version = "7.6.0", features = ["fancy"] }
 
 thiserror = "2.0.17"
