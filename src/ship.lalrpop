@@ -24,6 +24,7 @@ extern {
 
         "survey" => ShipToken::Survey,
         "military" => ShipToken::Military,
+        "construct" => ShipToken::Construct,
 
         "scale" => ShipToken::Scale,
 
@@ -76,6 +77,7 @@ AssetLocation:String = {
 ShipClass:ShipClass = {
     "ship_class" "=" "survey" => ShipClass::Survey,
     "ship_class" "=" "military" => ShipClass::Military,
+    "ship_class" "=" "construct" => ShipClass::Construct,
 }
 
 Scale:f32 = {

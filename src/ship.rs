@@ -39,6 +39,9 @@ pub enum ShipToken {
     #[token("military")]
     Military,
 
+    #[token("construct")]
+    Construct,
+
     #[token("scale")]
     Scale,
 
@@ -57,6 +60,7 @@ pub enum ShipClass {
     #[default]
     Survey,
     Military,
+    Construct,
 }
 
 lalrpop_mod!(pub ship);
