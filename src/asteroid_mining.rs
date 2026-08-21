@@ -14,7 +14,7 @@ use crate::{
 #[derive(Logos, Clone, Debug, PartialEq)]
 #[logos(skip r"[\s\t\f]+", error = LexicalError)]
 #[logos(skip r"//[^\n\r]*?")]
-pub enum AsteroidToken {
+pub enum AsteroidMineToken {
     #[regex(r#""[^"]*""#, |lex| lex.slice().trim_matches('"').to_string())]
     String(String),
 
@@ -63,7 +63,7 @@ pub enum AsteroidToken {
     Time,
 }
 
-impl fmt::Display for AsteroidToken {
+impl fmt::Display for AsteroidMineToken {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{self:?}")
     }
@@ -96,7 +96,7 @@ pub enum Field {
 }
 
 impl<'s> DataParser<'s> for AsteroidMiningData {
-    type Token = AsteroidToken;
+    type Token = AsteroidMineToken;
     fn parse_tokens(
         tokens: Vec<(usize, Self::Token, usize)>,
     ) -> Result<Vec<Self>, ParseError<usize, Self::Token, String>> {

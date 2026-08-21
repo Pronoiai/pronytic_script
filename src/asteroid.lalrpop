@@ -1,0 +1,30 @@
+use crate::asteroid::{AsteroidData,AsteroidToken};
+
+grammar;
+
+extern {
+    type Location = usize;
+    type Error = String;
+
+    enum AsteroidToken {
+        "string" => AsteroidToken::String(<String>),
+        "=" => AsteroidToken::Equal,
+        "[" => AsteroidToken::LeftSquare,
+        "]" => AsteroidToken::RightSquare,
+        "asset_locations" => AsteroidToken::AssetLocations,
+    }
+}
+
+/// Only a vec in order to combine
+pub AsteroidData:Vec<AsteroidData> = {
+    "asset_locations" "=" "[" <s:"string"*> "]" => {
+        let mut locations = Vec::with_capacity(s.len());
+        for location in s {
+            locations.push(
+            AsteroidData {
+                location
+            });
+        }
+        locations
+    }
+}

@@ -14,13 +14,14 @@ use thiserror::Error;
 use logos::{self, Logos};
 
 use crate::{
-    asteroid_mining::AsteroidMiningData, augmentations::AugmentationData, common::DataParser,
-    designation::DesignationData, orbital::OrbitalData, ranks::RankData, ship::ShipData,
-    shipyard::ShipyardData, shipyard_buildings::ShipyardBuildingData,
+    asteroid::AsteroidData, asteroid_mining::AsteroidMiningData, augmentations::AugmentationData,
+    common::DataParser, designation::DesignationData, orbital::OrbitalData, ranks::RankData,
+    ship::ShipData, shipyard::ShipyardData, shipyard_buildings::ShipyardBuildingData,
     species_trait::SpeciesTraitData, stapledon_swarm::StapledonSwarmData, star::StarData,
     stellar_system::StellarData, tooltips::ToolTipsData,
 };
 
+pub mod asteroid;
 pub mod asteroid_mining;
 pub mod augmentations;
 pub mod building;
@@ -94,6 +95,7 @@ macro_rules! create_parse_data {
 }
 
 create_parse_data!({
+    pub asteroids: Vec<AsteroidData>,
     pub asteroid_mining: Vec<AsteroidMiningData>,
     pub augmentations: Vec<AugmentationData>,
     pub building_data: Vec<BuildingData>,
@@ -116,6 +118,8 @@ create_parse_data!({
 #[derive(Logos, Clone, Debug, PartialEq)]
 #[logos(error=LexicalError)]
 pub enum Token {
+    #[token("#asteroids")]
+    Asteroids,
     #[token("#asteroid_mining")]
     AsteroidMining,
     #[token("#augmentations")]
@@ -163,6 +167,7 @@ impl fmt::Display for Token {
 lalrpop_mod!(pub lib);
 
 pub enum Section {
+    Asteroids(String),
     AsteroidMining(String),
     Augmentations(String),
     Buildings(String),
@@ -262,6 +267,9 @@ pub fn parse(file_name: &str, contents: &str) -> ParseData {
                 match s {
                     Section::AsteroidMining(s) => parse_data
                         .asteroid_mining
+                        .append(&mut parse_section(file_name, &s)),
+                    Section::Asteroids(s) => parse_data
+                        .asteroids
                         .append(&mut parse_section(file_name, &s)),
                     Section::Augmentations(s) => parse_data
                         .augmentations

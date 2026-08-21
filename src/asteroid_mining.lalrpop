@@ -1,5 +1,5 @@
 use rust_decimal::Decimal;
-use crate::asteroid_mining::{Field,AsteroidMiningData,AsteroidToken};
+use crate::asteroid_mining::{Field,AsteroidMiningData,AsteroidMineToken};
 
 use crate::common::GoodConsumes;
 
@@ -9,35 +9,35 @@ extern {
     type Location = usize;
     type Error = String;
 
-    enum AsteroidToken{
-        "string" => AsteroidToken::String(<String>),
-        "number" => AsteroidToken::Number(<u8>),
-        "decimal_number" => AsteroidToken::DecimalNumber(<Decimal>),
+    enum AsteroidMineToken{
+        "string" => AsteroidMineToken::String(<String>),
+        "number" => AsteroidMineToken::Number(<u8>),
+        "decimal_number" => AsteroidMineToken::DecimalNumber(<Decimal>),
 
-        "=" => AsteroidToken::Equal,
-        ":" => AsteroidToken::Colon,
+        "=" => AsteroidMineToken::Equal,
+        ":" => AsteroidMineToken::Colon,
 
-        "{" => AsteroidToken::LeftCurly,
-        "}" => AsteroidToken::RightCurly,
+        "{" => AsteroidMineToken::LeftCurly,
+        "}" => AsteroidMineToken::RightCurly,
 
-        "[" => AsteroidToken::LeftSquare,
-        "]" => AsteroidToken::RightSquare,
+        "[" => AsteroidMineToken::LeftSquare,
+        "]" => AsteroidMineToken::RightSquare,
 
-        "name" => AsteroidToken::Name,
-        "depot_asset" => AsteroidToken::DepotAsset,
-        "ship_asset" => AsteroidToken::ShipAsset,
+        "name" => AsteroidMineToken::Name,
+        "depot_asset" => AsteroidMineToken::DepotAsset,
+        "ship_asset" => AsteroidMineToken::ShipAsset,
 
-        "good_id" => AsteroidToken::GoodId,
+        "good_id" => AsteroidMineToken::GoodId,
 
-        "amount" => AsteroidToken::Amount,
-        
-        "consumes" => AsteroidToken::Consumes,
-        "produces" => AsteroidToken::Produces,
+        "amount" => AsteroidMineToken::Amount,
 
-        "power" => AsteroidToken::Power,
+        "consumes" => AsteroidMineToken::Consumes,
+        "produces" => AsteroidMineToken::Produces,
 
-        "time" => AsteroidToken::Time,
-        
+        "power" => AsteroidMineToken::Power,
+
+        "time" => AsteroidMineToken::Time,
+
     }
 }
 
