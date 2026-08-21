@@ -30,6 +30,10 @@ pub enum ShipToken {
     Name,
     #[token("asset_location")]
     AssetLocation,
+
+    #[token("audio_location")]
+    AudioLocation,
+
     #[token("ship_class")]
     ShipClass,
 
@@ -70,6 +74,7 @@ pub struct ShipData {
     pub name: String,
 
     pub asset_location: String,
+    pub audio_location: String,
 
     pub ship_class: ShipClass,
 
@@ -81,6 +86,7 @@ pub struct ShipData {
 pub enum Field {
     Name(String),
     AssetLocation(String),
+    AudioLocation(String),
     ShipClass(ShipClass),
     Scale(f32),
     StartsWith(bool),

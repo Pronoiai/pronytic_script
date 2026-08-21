@@ -20,6 +20,8 @@ extern {
 
         "name" => ShipToken::Name,
         "asset_location" => ShipToken::AssetLocation,
+        "audio_location" => ShipToken::AudioLocation,
+
         "ship_class" => ShipToken::ShipClass,
 
         "survey" => ShipToken::Survey,
@@ -48,6 +50,7 @@ ShipDatum:ShipData = {
             match f {
                 Field::Name(n) => ship_data.name = n,
                 Field::AssetLocation(a) => ship_data.asset_location = a,
+                Field::AudioLocation(a) => ship_data.audio_location = a,
                 Field::ShipClass(s) => ship_data.ship_class = s,
                 Field::Scale(s) => ship_data.scale = s,
                 Field::StartsWith(b) => ship_data.starts_with = b,
@@ -61,6 +64,7 @@ ShipDatum:ShipData = {
 ShipField:Field = {
     <n:Name> => Field::Name(n),
     <a:AssetLocation> => Field::AssetLocation(a),
+    <a:AudioLocation> => Field::AudioLocation(a),
     <s:ShipClass> => Field::ShipClass(s),
     <s:Scale> => Field::Scale(s),
     <s:StartsWith> => Field::StartsWith(s),
@@ -73,6 +77,11 @@ Name:String = {
 AssetLocation:String = {
     "asset_location" "=" <s:"string"> => s,
 }
+
+AudioLocation:String = {
+    "audio_location" "=" <s:"string"> => s,
+}
+
 
 ShipClass:ShipClass = {
     "ship_class" "=" "survey" => ShipClass::Survey,
