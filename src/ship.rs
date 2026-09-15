@@ -46,6 +46,9 @@ pub enum ShipToken {
     #[token("construct")]
     Construct,
 
+    #[token("resource")]
+    Resource,
+
     #[token("scale")]
     Scale,
 
