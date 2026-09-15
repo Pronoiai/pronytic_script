@@ -65,6 +65,7 @@ pub enum ShipClass {
     Survey,
     Military,
     Construct,
+    Resource,
 }
 
 lalrpop_mod!(pub ship);
