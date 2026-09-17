@@ -28,6 +28,7 @@ extern {
         "military" => ShipToken::Military,
         "construct" => ShipToken::Construct,
         "resource" => ShipToken::Resource,
+        "colony" => ShipToken::Colony,
 
         "scale" => ShipToken::Scale,
 
@@ -89,6 +90,7 @@ ShipClass:ShipClass = {
     "ship_class" "=" "military" => ShipClass::Military,
     "ship_class" "=" "construct" => ShipClass::Construct,
     "ship_class" "=" "resource" => ShipClass::Resource,
+    "ship_class" "=" "colony" => ShipClass::Colony,
 }
 
 Scale:f32 = {
