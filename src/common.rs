@@ -55,3 +55,25 @@ pub enum PlanetFilter {
     AllOrbitals,
     AllPlanets,
 }
+
+#[derive(Clone, Debug)]
+pub struct Placement {
+    pub right: f32,
+    pub up: f32,
+    pub back: f32,
+
+    pub scale: f32,
+    pub asset_location: String,
+}
+
+impl Default for Placement {
+    fn default() -> Self {
+        Self {
+            right: Default::default(),
+            up: Default::default(),
+            back: Default::default(),
+            scale: 1.0,
+            asset_location: Default::default(),
+        }
+    }
+}

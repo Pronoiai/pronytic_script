@@ -24,29 +24,11 @@ pub enum StarToken {
     #[token("}")]
     RightCurly,
 
-    #[token("x")]
-    X,
-    #[token("y")]
-    Y,
-    #[token("z")]
-    Z,
-
     #[token("asset_location")]
     AssetLocation,
 
-    #[token("claim_asset_location")]
-    ClaimAssetLocation,
-
     #[token("scale")]
     Scale,
-    #[token("claim_asset_scale")]
-    ClaimAssetScale,
-
-    #[token("claim_asset_offset")]
-    ClaimAssetOffset,
-
-    #[token("claim_asset_field")]
-    ClaimAssetField,
 
     #[token("click_sound")]
     ClickSound,
@@ -63,33 +45,14 @@ lalrpop_mod!(pub star);
 pub struct StarData {
     pub id: String,
     pub asset_location: String,
-    pub claim_asset_location: String,
     pub scale: Decimal,
-    pub claim_asset_scale: Decimal,
-    pub asset_offset: ClaimAssetOffset,
     pub click_location: String,
-}
-
-#[derive(Clone, Default, Debug)]
-pub struct ClaimAssetOffset {
-    pub x: Decimal,
-    pub y: Decimal,
-    pub z: Decimal,
 }
 
 pub enum StarField {
     AssetLocation(String),
-    ClaimAssetLocation(String),
     Scale(Decimal),
-    ClaimAssetScale(Decimal),
-    ClaimAssetOffset(ClaimAssetOffset),
     ClickLocation(String),
-}
-
-pub enum OffsetField {
-    X(Decimal),
-    Y(Decimal),
-    Z(Decimal),
 }
 
 impl<'s> DataParser<'s> for StarData {

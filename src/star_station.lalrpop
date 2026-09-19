@@ -1,0 +1,137 @@
+use crate::star_station::{Field,StarStationData,StarStationToken,StationClass,Placement,PlacementField};
+
+use rust_decimal::prelude::*;
+
+grammar;
+
+extern {
+    type Location = usize;
+    type Error = String;
+
+    enum StarStationToken {
+        "string" => StarStationToken::String(<String>),
+        "number" => StarStationToken::Number(<u8>),
+        "decimal_number" => StarStationToken::DecimalNumber(<Decimal>),
+
+        "=" => StarStationToken::Equal,
+
+        "{" => StarStationToken::LeftCurly,
+        "}" => StarStationToken::RightCurly,
+
+        "[" => StarStationToken::LeftSquare,
+        "]" => StarStationToken::RightSquare,
+
+
+        "name" => StarStationToken::Name,
+
+        "station_class" => StarStationToken::StationClass,
+
+        "construction" => StarStationToken::Construction,
+        "population" => StarStationToken::Population,
+        "resource" => StarStationToken::Resource,
+        "statite" => StarStationToken::Statite,
+
+        "placement" => StarStationToken::Placement,
+
+        "right" => StarStationToken::Right,
+        "up" => StarStationToken::Up,
+        "back" => StarStationToken::Back,
+        "scale" => StarStationToken::Scale,
+        "path" => StarStationToken::Path,
+    }
+}
+
+pub StarStationData:Vec<StarStationData> = {
+    <list:StarStationDatum*> => list,
+}
+
+StarStationDatum:StarStationData = {
+    <level:"number"> "=" "{" <fields:StarStationField*> "}" => {
+        let mut star_station = StarStationData {
+            level,
+            ..Default::default()
+        };
+        for f in fields {
+            match f {
+                Field::Name(n) => star_station.name = n,
+                Field::StationClass(s) => star_station.station_class = s,
+                Field::Placement(p) => star_station.placement = p,
+            }
+        }
+        star_station
+    }
+}
+
+StarStationField:Field = {
+    <n:Name> => Field::Name(n),
+    <m:StationClass> => Field::StationClass(m),
+    <p:Placement> => Field::Placement(p),
+}
+
+Name:String = {
+    "name" "=" <s:"string"> => s,
+}
+
+StationClass:StationClass = {
+    "station_class" "=" "construction" => StationClass::Construction,
+    "station_class" "=" "population" => StationClass::Population,
+    "station_class" "=" "resource" => StationClass::Resource,
+    "station_class" "=" "statite" => StationClass::Statite,
+}
+
+Placement:Placement = {
+    "placement" "=" "{"
+        <fields:PlacementField*>
+    "}" => {
+        let mut placement = Placement::default();
+
+        for f in fields {
+            match f {
+                PlacementField::Right(r) => {
+                    placement.right = r;
+                }
+                PlacementField::Up(u) => {
+                    placement.up = u;
+                }
+                PlacementField::Back(b) => {
+                    placement.back = b;
+                }
+                PlacementField::Scale(s) => {
+                    placement.scale = s;
+                }
+                PlacementField::Path(p) => {
+                    placement.asset_location = p;
+                }
+            }
+        }
+        placement
+    }
+}
+
+PlacementField:PlacementField = {
+    <x:X> => PlacementField::Right(x),
+    <y:Y> => PlacementField::Up(y),
+    <z:Z> => PlacementField::Back(z),
+    <s:Scale> => PlacementField::Scale(s),
+    <p:Path> => PlacementField::Path(p),
+}
+
+X:f32 = {
+    "right" "=" <n:"decimal_number"> => n.to_f32().unwrap(),
+}
+
+Y:f32 = {
+    "up" "=" <n:"decimal_number"> => n.to_f32().unwrap(),
+}
+
+Z:f32 = {
+    "back" "=" <n:"decimal_number"> => n.to_f32().unwrap(),
+}
+
+Scale:f32 = {
+    "scale" "=" <n:"decimal_number"> => n.to_f32().unwrap(),
+}
+
+Path:String ={
+    "path" "=" <s:"string"> => s,
+}

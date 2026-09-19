@@ -6,13 +6,13 @@ use rust_decimal::prelude::*;
 
 use crate::{
     LexicalError,
-    common::{DataParser, GoodConsumes, Placement},
+    common::{DataParser, Placement},
 };
 
 #[derive(Logos, Clone, Debug, PartialEq)]
 #[logos(skip r"[\s\t\f]+", error = LexicalError)]
 #[logos(skip r"//[^\n\r]*?")]
-pub enum OrbitalToken {
+pub enum StarStationToken {
     #[regex(r#""[^"]*""#, |lex| lex.slice().trim_matches('"').to_string())]
     String(String),
 
@@ -34,28 +34,23 @@ pub enum OrbitalToken {
     #[token("]")]
     RightSquare,
 
-    #[token(":")]
-    Colon,
-
     #[token("name")]
     Name,
 
-    #[token("consumes")]
-    Consumes,
-    #[token("good_id")]
-    GoodId,
-    #[token("amount")]
-    Amount,
+    #[token("station_class")]
+    StationClass,
 
-    #[token("time")]
-    Time,
-    #[token("building_limit")]
-    BuildingLimit,
+    #[token("construction")]
+    Construction,
 
-    #[token("magnetosphere")]
-    Magnetosphere,
-    #[token("atmosphere")]
-    Atmosphere,
+    #[token("population")]
+    Population,
+
+    #[token("Resource")]
+    Resource,
+
+    #[token("statite")]
+    Statite,
 
     #[token("placement")]
     Placement,
@@ -72,33 +67,34 @@ pub enum OrbitalToken {
     Path,
 }
 
-impl fmt::Display for OrbitalToken {
+impl fmt::Display for StarStationToken {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{self:?}")
     }
 }
 
-lalrpop_mod!(pub orbital);
+lalrpop_mod!(pub star_station);
+
 #[derive(Clone, Default, Debug)]
-pub struct OrbitalData {
+pub struct StarStationData {
     pub level: u8,
     pub name: String,
-
-    pub costs: Vec<GoodConsumes>,
-
+    pub station_class: StationClass,
     pub placement: Placement,
-
-    pub time: u8,
-    pub building_limit: u8,
 }
 
-/// Differentiates between each field when parsing
-/// This allows fields to be done in arbitrary order in lalrpop files
+#[derive(Clone, Default, Debug, PartialEq)]
+pub enum StationClass {
+    #[default]
+    Construction,
+    Population,
+    Resource,
+    Statite,
+}
+
 pub enum Field {
     Name(String),
-    Consumes(Vec<GoodConsumes>),
-    Time(u8),
-    BuildingLimit(u8),
+    StationClass(StationClass),
     Placement(Placement),
 }
 
@@ -110,11 +106,12 @@ pub enum PlacementField {
     Path(String),
 }
 
-impl<'s> DataParser<'s> for OrbitalData {
-    type Token = OrbitalToken;
+impl<'s> DataParser<'s> for StarStationData {
+    type Token = StarStationToken;
+
     fn parse_tokens(
         tokens: Vec<(usize, Self::Token, usize)>,
-    ) -> Result<Vec<OrbitalData>, lalrpop_util::ParseError<usize, Self::Token, String>> {
-        orbital::OrbitalDataParser::new().parse(tokens)
+    ) -> Result<Vec<Self>, lalrpop_util::ParseError<usize, Self::Token, String>> {
+        star_station::StarStationDataParser::new().parse(tokens)
     }
 }
