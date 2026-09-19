@@ -19,7 +19,7 @@ pub enum StarStationToken {
     #[regex(r"(\d+)", |lex|lex.slice().parse::<u8>().expect("parsing u8"), priority = 5)]
     Number(u8),
 
-    #[regex(r"(\d+\.?\d*)", |lex| Decimal::from_str(lex.slice()).expect("parsed_decimal"), priority = 4)]
+    #[regex(r"(-?\d+\.?\d*)", |lex| Decimal::from_str(lex.slice()).expect("parsed_decimal"), priority = 4)]
     DecimalNumber(Decimal),
 
     #[token("=")]
@@ -46,7 +46,7 @@ pub enum StarStationToken {
     #[token("population")]
     Population,
 
-    #[token("Resource")]
+    #[token("resource")]
     Resource,
 
     #[token("statite")]
