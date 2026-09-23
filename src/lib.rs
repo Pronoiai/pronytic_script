@@ -17,8 +17,8 @@ use crate::{
     asteroid::AsteroidData, asteroid_mining::AsteroidMiningData, augmentations::AugmentationData,
     common::DataParser, designation::DesignationData, orbital::OrbitalData, ranks::RankData,
     ship::ShipData, shipyard::ShipyardData, shipyard_buildings::ShipyardBuildingData,
-    species_trait::SpeciesTraitData, stapledon_swarm::StapledonSwarmData, star::StarData,
-    star_station::StarStationData, stellar_system::StellarData, tooltips::ToolTipsData,
+    stapledon_swarm::StapledonSwarmData, star::StarData, star_station::StarStationData,
+    stellar_system::StellarData, tooltips::ToolTipsData,
 };
 
 pub mod asteroid;
@@ -34,7 +34,6 @@ pub mod ranks;
 pub mod ship;
 pub mod shipyard;
 pub mod shipyard_buildings;
-pub mod species_trait;
 pub mod stapledon_swarm;
 pub mod star;
 pub mod star_station;
@@ -105,7 +104,6 @@ create_parse_data!({
     pub orbital_data: Vec<OrbitalData>,
     pub planet_type_data: Vec<PlanetTypeData>,
     pub rank_data:Vec<RankData>,
-    pub species_trait: Vec<SpeciesTraitData>,
     pub ships:Vec<ShipData>,
     pub shipyard: Vec<ShipyardData>,
     pub shipyard_buildings:Vec<ShipyardBuildingData>,
@@ -144,8 +142,6 @@ pub enum Token {
     Shipyard,
     #[token("#shipyard_buildings")]
     ShipyardBuildings,
-    #[token("#specie_traits")]
-    SpecieTraits,
     #[token("#stapledon_swarm")]
     Stapledon,
     #[token("#star_data")]
@@ -180,7 +176,6 @@ pub enum Section {
     Orbital(String),
     PlanetTypes(String),
     Ranks(String),
-    SpecieTraits(String),
     Ships(String),
     Shipyard(String),
     ShipyardBuildings(String),
@@ -303,9 +298,6 @@ pub fn parse(file_name: &str, contents: &str) -> ParseData {
                         .append(&mut parse_section(file_name, &s)),
                     Section::ShipyardBuildings(s) => parse_data
                         .shipyard_buildings
-                        .append(&mut parse_section(file_name, &s)),
-                    Section::SpecieTraits(s) => parse_data
-                        .species_trait
                         .append(&mut parse_section(file_name, &s)),
                     Section::Stapledon(s) => parse_data
                         .stapledon
