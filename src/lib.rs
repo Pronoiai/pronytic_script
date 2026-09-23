@@ -14,16 +14,15 @@ use thiserror::Error;
 use logos::{self, Logos};
 
 use crate::{
-    asteroid::AsteroidData, asteroid_mining::AsteroidMiningData, augmentations::AugmentationData,
-    common::DataParser, designation::DesignationData, orbital::OrbitalData, ranks::RankData,
-    ship::ShipData, shipyard::ShipyardData, shipyard_buildings::ShipyardBuildingData,
+    asteroid::AsteroidData, asteroid_mining::AsteroidMiningData, common::DataParser,
+    designation::DesignationData, orbital::OrbitalData, ranks::RankData, ship::ShipData,
+    shipyard::ShipyardData, shipyard_buildings::ShipyardBuildingData,
     stapledon_swarm::StapledonSwarmData, star::StarData, star_station::StarStationData,
     stellar_system::StellarData, tooltips::ToolTipsData,
 };
 
 pub mod asteroid;
 pub mod asteroid_mining;
-pub mod augmentations;
 pub mod building;
 pub mod common;
 pub mod designation;
@@ -97,7 +96,6 @@ macro_rules! create_parse_data {
 create_parse_data!({
     pub asteroids: Vec<AsteroidData>,
     pub asteroid_mining: Vec<AsteroidMiningData>,
-    pub augmentations: Vec<AugmentationData>,
     pub building_data: Vec<BuildingData>,
     pub designation_data:Vec<DesignationData>,
     pub goods_data: Vec<GoodData>,
@@ -122,8 +120,6 @@ pub enum Token {
     Asteroids,
     #[token("#asteroid_mining")]
     AsteroidMining,
-    #[token("#augmentations")]
-    Augmentations,
     #[token("#buildings")]
     Buildings,
     #[token("#designations")]
@@ -169,7 +165,6 @@ lalrpop_mod!(pub lib);
 pub enum Section {
     Asteroids(String),
     AsteroidMining(String),
-    Augmentations(String),
     Buildings(String),
     Designations(String),
     Goods(String),
@@ -270,9 +265,6 @@ pub fn parse(file_name: &str, contents: &str) -> ParseData {
                         .append(&mut parse_section(file_name, &s)),
                     Section::Asteroids(s) => parse_data
                         .asteroids
-                        .append(&mut parse_section(file_name, &s)),
-                    Section::Augmentations(s) => parse_data
-                        .augmentations
                         .append(&mut parse_section(file_name, &s)),
                     Section::Buildings(s) => parse_data
                         .building_data
