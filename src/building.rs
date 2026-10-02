@@ -32,6 +32,8 @@ pub struct BuildingData {
     pub upkeep: Vec<CustomGood>,
     pub produces: Vec<CustomGood>,
 
+    pub build_time: u8,
+
     pub category: Category,
 
     pub housing: u64,
@@ -73,6 +75,7 @@ impl Default for BuildingData {
             upkeep: Vec::new(),
             produces: Vec::new(),
 
+            build_time: 12,
             housing: 0,
             workers: 0,
 
@@ -202,6 +205,9 @@ pub enum BuildingToken {
     #[token("produces")]
     Produces,
 
+    #[token("build_time")]
+    BuildTime,
+
     #[token("category")]
     Category,
 
@@ -275,6 +281,7 @@ pub enum Field {
     Consumes(Vec<CustomGood>),
     Upkeep(Vec<CustomGood>),
     Produces(Vec<CustomGood>),
+    BuildTime(u64),
     Housing(u64),
     Workers(u64),
     PrivateSector(bool),

@@ -46,6 +46,8 @@ extern {
 
         "category" => BuildingToken::Category,
 
+        "build_time" => BuildingToken::BuildTime,
+
         "housing" => BuildingToken::Housing,
         "workers" => BuildingToken::Workers,
 
@@ -115,6 +117,7 @@ Building:BuildingData = {
                 Field::Housing(h) => building_data.housing = h,
                 Field::Workers(w) => building_data.workers = w,
                 Field::Category(c) => building_data.category = c,
+                Field::BuildTime(b) => building_data.build_time = b as u8,
                 Field::PrivateSector(p) => {
                     building_data.private_sector = p;
                 }
@@ -163,6 +166,7 @@ Field:Field = {
     <c:Consumes> => Field::Consumes(c),
     <u:Upkeep> => Field::Upkeep(u),
     <p:Produces> => Field::Produces(p),
+    <b:BuildTime> => Field::BuildTime(b),
     <h:Housing> => Field::Housing(h),
     <w:Workers> => Field::Workers(w),
     <p:PrivateSector> => Field::PrivateSector(p),
@@ -235,6 +239,10 @@ Unique:bool = {
 
 Energy:Decimal = {
     "energy" "=" <n:"decimal"> => n,
+}
+
+BuildTime:u64 = {
+    "build_time" "=" <n:"number"> => n,
 }
 
 Housing:u64 = {
