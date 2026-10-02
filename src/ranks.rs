@@ -32,6 +32,10 @@ pub enum RankToken {
     StockpileMax,
     #[token("huck_max")]
     HuckMax,
+
+    #[token("huck_subsidy")]
+    HuckSubsidy,
+
     #[token("level")]
     Level,
     #[token("name")]
@@ -55,6 +59,7 @@ pub struct RankData {
     pub number_of_stars: u16,
     pub stockpile_max: u16,
     pub huck_max: Decimal,
+    pub huck_subsidy: Decimal,
     pub description: Option<String>,
 }
 impl<'s> DataParser<'s> for RankData {
@@ -72,5 +77,6 @@ pub enum Field {
     NumStars(u16),
     StockpileMax(u16),
     HuckMax(Decimal),
+    HuckSubsidy(Decimal),
     Description(String),
 }

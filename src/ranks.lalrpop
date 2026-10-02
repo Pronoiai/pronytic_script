@@ -22,6 +22,7 @@ extern {
 		"number_of_stars" => RankToken::NumStars,
 		"stockpile_max" => RankToken::StockpileMax,
 		"huck_max" => RankToken::HuckMax,
+		"huck_subsidy" => RankToken::HuckSubsidy,
 
 		"level" => RankToken::Level,
 		"name" => RankToken::Name,
@@ -44,6 +45,7 @@ RankDatum:RankData = {
 				Field::NumStars(n) => rank.number_of_stars = n,
 				Field::StockpileMax(n) => rank.stockpile_max = n,
 				Field::HuckMax(d) => rank.huck_max = d,
+				Field::HuckSubsidy(d) => rank.huck_subsidy = d,
 				Field::Description(d) => rank.description = Some(d),
 			}
 		}
@@ -58,6 +60,7 @@ RankField:Field ={
 	<n:NumStars> => Field::NumStars(n),
 	<n:StockpileMax> => Field::StockpileMax(n),
     <d:HuckMax> => Field::HuckMax(d),
+    <d:HuckSubsidy> => Field::HuckSubsidy(d),
 	<d:Description> => Field::Description(d),
 }
 
@@ -75,6 +78,10 @@ StockpileMax:u16 = {
 
 HuckMax:Decimal = {
 	"huck_max" "=" <d:"decimal"> => d,
+}
+
+HuckSubsidy:Decimal = {
+    "huck_subsidy" "=" <d:"decimal"> => d,
 }
 
 Description:String = {
