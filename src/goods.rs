@@ -47,8 +47,6 @@ pub enum GoodToken {
     Public,
     #[token("private")]
     Private,
-    #[token("tender")]
-    Tender,
 
     #[token("hardcoded_id")]
     HardcodedId,
@@ -102,7 +100,6 @@ pub enum GoodType {
     #[default]
     Public,
     Private,
-    Tender,
 }
 
 #[derive(Clone, Debug)]

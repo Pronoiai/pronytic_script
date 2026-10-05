@@ -23,7 +23,6 @@ extern {
         "good_type" => GoodToken::GoodType,
         "public" => GoodToken::Public,
         "private" => GoodToken::Private,
-        "tender" => GoodToken::Tender,
         "hardcoded_id" => GoodToken::HardcodedId,
         "consumption_type" => GoodToken::ConsumptionType,
 
@@ -127,7 +126,6 @@ ProsperityCost:Decimal = {
 GoodType:GoodType = {
     "good_type" "=" "public" => GoodType::Public,
     "good_type" "=" "private" => GoodType::Private,
-    "good_type" "=" "tender" => GoodType::Tender,
 }
 
 Magnetosphere:Decimal = {
@@ -181,11 +179,11 @@ ConsumptionType:ConsumptionType = {
                 SurvivalField::Temperature(t) => survival_conditions.temperature = Some(t),
                 SurvivalField::Water(w) => survival_conditions.water = Some(w),
                 SurvivalField::Breathability(b) => survival_conditions.breathability = Some(b),
-                SurvivalField::ServedStep(s) =>survival_conditions.served_step = s, 
+                SurvivalField::ServedStep(s) =>survival_conditions.served_step = s,
                 SurvivalField::LackServicePenalty(s) => survival_conditions.lack_of_service_penalty = s,
             }
-        } 
-        assert_ne!(survival_conditions,SurvivalConditions::default()); 
+        }
+        assert_ne!(survival_conditions,SurvivalConditions::default());
         ConsumptionType::Survival(survival_conditions)
-    } 
+    }
 }
