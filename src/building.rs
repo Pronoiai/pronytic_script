@@ -17,6 +17,8 @@ pub struct BuildingData {
     pub id: String,
     pub name: String,
 
+    pub icon: String,
+
     pub description: String,
 
     pub planet_filters: Vec<PlanetFilter>,
@@ -61,6 +63,7 @@ impl Default for BuildingData {
         BuildingData {
             id: "".to_string(),
             name: "".to_string(),
+            icon: "".to_string(),
             description: "".to_string(),
             planet_filters: Vec::new(),
             initial: false,
@@ -170,6 +173,8 @@ pub enum BuildingToken {
     Id,
     #[token("name")]
     Name,
+    #[token("icon")]
+    Icon,
 
     #[token("description")]
     Description,
@@ -272,6 +277,7 @@ lalrpop_mod!(pub buildings);
 pub enum Field {
     Name(String),
     Description(String),
+    Icon(String),
     PlanetFilters(Vec<PlanetFilter>),
     Initial(bool),
     Unique(bool),

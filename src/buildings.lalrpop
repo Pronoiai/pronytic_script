@@ -27,6 +27,7 @@ extern {
 
         "id" => BuildingToken::Id,
         "name" => BuildingToken::Name,
+        "icon" => BuildingToken::Icon,
 
         "description" => BuildingToken::Description,
 
@@ -95,6 +96,9 @@ Building:BuildingData = {
                 Field::Description(d) => {
                     building_data.description = d.replace("\\n", "\n");
                 }
+                Field::Icon(i) => {
+                    building_data.icon = i;
+                }
                 Field::PlanetFilters(p) => {
                     building_data.planet_filters = p;
                 }
@@ -157,6 +161,7 @@ Building:BuildingData = {
 Field:Field = {
     <n:Name> => Field::Name(n),
     <d:Description> => Field::Description(d),
+    <i:Icon> => Field::Icon(i),
     <p:PlanetFilters> => Field::PlanetFilters(p),
     <i:Initial> => Field::Initial(i),
     <u:Unique> => Field::Unique(u),
@@ -213,6 +218,10 @@ Id:String = {
 
 Name:String = {
     "name" "=" <id:"string"> => id,
+}
+
+Icon:String = {
+    "icon" "=" <id:"string"> => id,
 }
 
 Description:String = {
