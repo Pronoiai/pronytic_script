@@ -30,6 +30,9 @@ pub enum RankToken {
 
     #[token("stockpile_max")]
     StockpileMax,
+    #[token("sellable_max")]
+    SellableMax,
+
     #[token("huck_max")]
     HuckMax,
 
@@ -58,6 +61,7 @@ pub struct RankData {
     pub name: String,
     pub number_of_stars: u16,
     pub stockpile_max: u16,
+    pub sellable_max: u16,
     pub huck_max: Decimal,
     pub huck_subsidy: Decimal,
     pub description: Option<String>,
@@ -76,6 +80,7 @@ pub enum Field {
     Name(String),
     NumStars(u16),
     StockpileMax(u16),
+    SellableMax(u16),
     HuckMax(Decimal),
     HuckSubsidy(Decimal),
     Description(String),

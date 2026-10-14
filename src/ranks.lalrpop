@@ -21,6 +21,8 @@ extern {
 
 		"number_of_stars" => RankToken::NumStars,
 		"stockpile_max" => RankToken::StockpileMax,
+		"sellable_max" => RankToken::SellableMax,
+
 		"huck_max" => RankToken::HuckMax,
 		"huck_subsidy" => RankToken::HuckSubsidy,
 
@@ -44,6 +46,7 @@ RankDatum:RankData = {
 				Field::Name(n) => rank.name = n,
 				Field::NumStars(n) => rank.number_of_stars = n,
 				Field::StockpileMax(n) => rank.stockpile_max = n,
+				Field::SellableMax(n) => rank.sellable_max = n,
 				Field::HuckMax(d) => rank.huck_max = d,
 				Field::HuckSubsidy(d) => rank.huck_subsidy = d,
 				Field::Description(d) => rank.description = Some(d),
@@ -59,6 +62,7 @@ RankField:Field ={
 	<n:Name> => Field::Name(n),
 	<n:NumStars> => Field::NumStars(n),
 	<n:StockpileMax> => Field::StockpileMax(n),
+	<n:SellableMax> => Field::SellableMax(n),
     <d:HuckMax> => Field::HuckMax(d),
     <d:HuckSubsidy> => Field::HuckSubsidy(d),
 	<d:Description> => Field::Description(d),
@@ -74,6 +78,9 @@ NumStars:u16 = {
 
 StockpileMax:u16 = {
 	"stockpile_max" "=" <n:"number"> => n,
+}
+SellableMax:u16 = {
+	"sellable_max" "=" <n:"number"> => n,
 }
 
 HuckMax:Decimal = {
