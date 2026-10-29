@@ -30,6 +30,9 @@ pub enum StarToken {
     #[token("scale")]
     Scale,
 
+    #[token("transmission_loss")]
+    TransmissionLoss,
+
     #[token("click_sound")]
     ClickSound,
 }
@@ -47,12 +50,14 @@ pub struct StarData {
     pub asset_location: String,
     pub scale: Decimal,
     pub click_location: String,
+    pub transmission_loss: Decimal,
 }
 
 pub enum StarField {
     AssetLocation(String),
     Scale(Decimal),
     ClickLocation(String),
+    TransmissionLoss(Decimal),
 }
 
 impl<'s> DataParser<'s> for StarData {
