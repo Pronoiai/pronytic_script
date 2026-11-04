@@ -32,6 +32,7 @@ extern {
         "amount" => AsteroidMineToken::Amount,
 
         "consumes" => AsteroidMineToken::Consumes,
+        "upkeep" => AsteroidMineToken::Upkeep,
         "produces" => AsteroidMineToken::Produces,
 
         "power" => AsteroidMineToken::Power,
@@ -58,6 +59,7 @@ AsteroidMiningDatum:AsteroidMiningData = {
                 Field::DepotAsset(n) => asteroid_mine.depot_asset = n,
                 Field::ShipAsset(n) => asteroid_mine.ship_asset = n,
                 Field::Consumes(c) => asteroid_mine.costs = c,
+                Field::Upkeep(u) => asteroid_mine.upkeep = u,
                 Field::Produces(c) => asteroid_mine.produces = c,
                 Field::Time(t) => asteroid_mine.time = t,
                 Field::Power(p) => asteroid_mine.power = p,
@@ -72,6 +74,7 @@ AsteroidField:Field ={
     <a:DepotAsset> => Field::DepotAsset(a),
     <a:ShipAsset> => Field::ShipAsset(a),
     <c:GoodConsumes> => Field::Consumes(c),
+    <u:GoodUpkeep> => Field::Upkeep(u),
     <c:GoodProduces> => Field::Produces(c),
     <t:Time> => Field::Time(t),
     <p:Power> => Field::Power(p),
@@ -98,7 +101,10 @@ Power:Decimal = {
 }
 
 GoodProduces:Vec<GoodConsumes> = {
-    "produces" "=" "[" <c:GoodConsume*> "]" =>c,
+    "produces" "=" "[" <c:GoodConsume*> "]" => c,
+}
+GoodUpkeep:Vec<GoodConsumes> = {
+    "upkeep" "=" "[" <u:GoodConsume*> "]" => u,
 }
 GoodConsumes:Vec<GoodConsumes> = {
     "consumes" "=" "[" <c:GoodConsume*> "]" =>c,

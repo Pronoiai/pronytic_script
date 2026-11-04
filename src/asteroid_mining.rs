@@ -49,6 +49,8 @@ pub enum AsteroidMineToken {
 
     #[token("consumes")]
     Consumes,
+    #[token("upkeep")]
+    Upkeep,
     #[token("produces")]
     Produces,
     #[token("good_id")]
@@ -79,6 +81,7 @@ pub struct AsteroidMiningData {
     pub ship_asset: String,
 
     pub costs: Vec<GoodConsumes>,
+    pub upkeep: Vec<GoodConsumes>,
     pub produces: Vec<GoodConsumes>,
 
     pub power: Decimal,
@@ -90,6 +93,7 @@ pub enum Field {
     DepotAsset(String),
     ShipAsset(String),
     Consumes(Vec<GoodConsumes>),
+    Upkeep(Vec<GoodConsumes>),
     Produces(Vec<GoodConsumes>),
     Time(u8),
     Power(Decimal),
