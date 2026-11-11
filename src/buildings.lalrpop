@@ -1,5 +1,8 @@
 use crate::building::{AtmosphereImpact,BuildingData,Category,CustomGood,
-MagnetosphereImpact,PlanetFilter,Station,StationField,Field,BuildingToken};
+MagnetosphereImpact,PlanetFilter,PlanetPotential,PlanetPotentialField,
+Station,StationField,Field,BuildingToken};
+
+use crate::common::SimpleCondition;
 
 use rust_decimal::prelude::*;
 
@@ -12,7 +15,9 @@ extern {
     enum BuildingToken {
         "true" => BuildingToken::True,
         "false" => BuildingToken::False,
+        "always" => BuildingToken::Always,
         "=" => BuildingToken::Equal,
+        "<" => BuildingToken::LessThan,
 
         "{" => BuildingToken::LeftCurly,
         "}" => BuildingToken::RightCurly,
@@ -35,6 +40,8 @@ extern {
         "all_orbitals" => BuildingToken::AllOrbitals,
 
         "planet_filters" => BuildingToken::PlanetFilters,
+        "potential" => BuildingToken::Potential,
+
         "initial" => BuildingToken::Initial,
         "unique" => BuildingToken::Unique,
         "energy" => BuildingToken::Energy,
@@ -57,6 +64,9 @@ extern {
         "private_sector" => BuildingToken::PrivateSector,
 
         "misc" => BuildingToken::Misc,
+
+        "atmosphere" => BuildingToken::Atmosphere,
+        "magnetosphere" => BuildingToken::Magnetosphere,
 
         "magnetosphere_equilibrium" => BuildingToken::MagnetosphereEquilibrium,
         "atmosphere_equilibrium" => BuildingToken::AtmosphereEquilibrium,
@@ -101,6 +111,9 @@ Building:BuildingData = {
                 }
                 Field::PlanetFilters(p) => {
                     building_data.planet_filters = p;
+                }
+                Field::Potential(p) => {
+                    building_data.potential = p;
                 }
                 Field::Initial(i) => {
                     building_data.initial = i;
@@ -163,6 +176,7 @@ Field:Field = {
     <d:Description> => Field::Description(d),
     <i:Icon> => Field::Icon(i),
     <p:PlanetFilters> => Field::PlanetFilters(p),
+    <p:PlanetPotential> => Field::Potential(p),
     <i:Initial> => Field::Initial(i),
     <u:Unique> => Field::Unique(u),
     <e:Energy> => Field::Energy(e),
@@ -236,6 +250,34 @@ PlanetFilter:PlanetFilter = {
     "orbital" "(" <planet:"string"> ")" => PlanetFilter::Orbital(planet),
     "all_orbitals" => PlanetFilter::AllOrbitals,
     <planet:"string"> => PlanetFilter::PlanetSide(planet),
+}
+
+PlanetPotential:PlanetPotential = {
+   "potential" "=" "{" <fields:PlanetPotentialField*> "}" => {
+        let mut planet_potential = PlanetPotential::default();
+        for f in fields {
+            match f {
+                PlanetPotentialField::Atmosphere(a) => planet_potential.atmosphere = a,
+                PlanetPotentialField::Magnetosphere(m) => planet_potential.magnetosphere = m,
+            }
+        }
+        planet_potential
+    },
+}
+
+PlanetPotentialField:PlanetPotentialField = {
+    <p:PlanetAtmospherePotentialField> => p,
+    <m:PlanetMagnetospherePotentialField> => m,
+}
+
+PlanetAtmospherePotentialField:PlanetPotentialField = {
+    "atmosphere" "=" "always" => PlanetPotentialField::Atmosphere(SimpleCondition::Always),
+    "atmosphere" "<" <n:"decimal"> => PlanetPotentialField::Atmosphere(SimpleCondition::LessThan(n)),
+}
+
+PlanetMagnetospherePotentialField:PlanetPotentialField = {
+    "magnetosphere" "=" "always" => PlanetPotentialField::Magnetosphere(SimpleCondition::Always),
+    "magnetosphere" "<" <n:"decimal"> => PlanetPotentialField::Magnetosphere(SimpleCondition::LessThan(n)),
 }
 
 Initial:bool = {

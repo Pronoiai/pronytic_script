@@ -77,3 +77,12 @@ impl Default for Placement {
         }
     }
 }
+
+/// Basic conditions for comparing a value to a fixed value
+#[derive(Clone, Debug, Default)]
+pub enum SimpleCondition {
+    #[default]
+    Always,
+    LessThan(Decimal),
+    // Will add others as I add support
+}
