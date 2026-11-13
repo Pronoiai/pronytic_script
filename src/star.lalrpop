@@ -19,7 +19,7 @@ extern {
 
         "asset_location" => StarToken::AssetLocation,
         "scale" => StarToken::Scale,
-        "transmission_loss" => StarToken::TransmissionLoss,
+        "transmission_penalty" => StarToken::TransmissionPenalty,
 
         "click_sound" => StarToken::ClickSound,
 
@@ -41,7 +41,7 @@ StarDatum:StarData = {
                 StarField::AssetLocation(a) => star_data.asset_location = a,
                 StarField::Scale(s) => star_data.scale = s,
                 StarField::ClickLocation(c) => star_data.click_location = c,
-                StarField::TransmissionLoss(t) => star_data.transmission_loss = t,
+                StarField::TransmissionPenalty(t) => star_data.transmission_penalty = t,
             }
         }
         star_data
@@ -53,7 +53,7 @@ StarField:StarField = {
     <a:AssetLocation> => StarField::AssetLocation(a),
     <s:Scale> => StarField::Scale(s),
     <c:ClickLocation> => StarField::ClickLocation(c),
-    <t:Transmission> => StarField::TransmissionLoss(t),
+    <t:Transmission> => StarField::TransmissionPenalty(t),
 }
 
 AssetLocation:String = {
@@ -65,7 +65,7 @@ Scale:Decimal = {
 }
 
 Transmission:Decimal = {
-    "transmission_loss" "=" <n:"decimal_number"> => n,
+    "transmission_penalty" "=" <n:"decimal_number"> => n,
 }
 
 ClickLocation:String = {
