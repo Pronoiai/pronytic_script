@@ -1,6 +1,6 @@
-
-use rust_decimal::Decimal;
-use crate::stapledon_swarm::{Field,StapledonSwarmData,StapledonToken};
+use rust_decimal::prelude::*;
+use crate::stapledon_swarm::{Field,PanelField,StapledonSwarmData,StapledonTransmissionData,StapledonPanelData
+,StapledonToken,TransmissionField};
 
 use crate::common::GoodConsumes;
 
@@ -14,8 +14,10 @@ extern {
         "string" => StapledonToken::String(<String>),
         "number" => StapledonToken::Number(<u8>),
         "decimal_number" => StapledonToken::DecimalNumber(<Decimal>),
+        "panel_level" => StapledonToken::PanelLevel(<u8>),
+        "transmission_level" => StapledonToken::TransmissionLevel(<u8>),
 
-        
+
         "=" => StapledonToken::Equal,
         ":" => StapledonToken::Colon,
 
@@ -25,29 +27,94 @@ extern {
         "[" => StapledonToken::LeftSquare,
         "]" => StapledonToken::RightSquare,
 
+        "scale" => StapledonToken::Scale,
         "name" => StapledonToken::Name,
+
+        "panel_asset" => StapledonToken::PanelAsset,
+        "sender_asset" => StapledonToken::SenderAsset,
 
         "swarm_asset" => StapledonToken::SwarmAsset,
         "receiver_asset" => StapledonToken::ReceiverAsset,
 
-        
+
         "good_id" => StapledonToken::GoodId,
 
         "amount" => StapledonToken::Amount,
-        
+
         "consumes" => StapledonToken::Consumes,
         "upkeep" => StapledonToken::Upkeep,
 
-        
+
         "time" => StapledonToken::Time,
         "power" => StapledonToken::Power,
     }
-    
+
 }
 
 pub StapledonData:Vec<StapledonSwarmData> = {
-    <list:StapledonDatum*> =>list,
+    <list:StapledonDatum*> => list,
 }
+
+StapledonTransmissionDatum:StapledonTransmissionData = {
+    <level:"transmission_level"> "=" "{" <fields:StapledonTransmissionField*> "}" => {
+        let mut transmission = StapledonTransmissionData {
+            level,
+            ..Default::default()
+        };
+        for f in fields {
+            match f {
+                TransmissionField::SenderAsset(a) => transmission.sender_asset = a,
+                TransmissionField::ReceiverAsset(a) => transmission.receiver_asset = a,
+                TransmissionField::Cost(c) => transmission.costs = c,
+                TransmissionField::Upkeep(c) => transmission.upkeep = c,
+                TransmissionField::Time(t) => transmission.build_time = t,
+                TransmissionField::Power(p) => transmission.power = p,
+                TransmissionField::Scale(s) => transmission.scale = s,
+            }
+        }
+        transmission
+    }
+}
+
+StapledonTransmissionField:TransmissionField = {
+    <a:SenderAsset> => TransmissionField::SenderAsset(a),
+    <a:ReceiverAsset> => TransmissionField::ReceiverAsset(a),
+    <c:GoodConsumes> => TransmissionField::Cost(c),
+    <c:GoodUpkeep> => TransmissionField::Upkeep(c),
+    <t:Time> => TransmissionField::Time(t),
+    <p:Power> => TransmissionField::Power(p),
+    <s:Scale> => TransmissionField::Scale(s),
+}
+
+StapledonPanelDatum:StapledonPanelData = {
+    <level:"panel_level"> "=" "{" <fields:PanelField*> "}" => {
+        let mut panel = StapledonPanelData {
+            level,
+            ..Default::default()
+        };
+        for f in fields {
+            match f {
+                PanelField::PanelAsset(a) => panel.asset = a,
+                PanelField::Cost(c) => panel.costs = c,
+                PanelField::Upkeep(c) => panel.upkeep = c,
+                PanelField::Power(p) => panel.power = p,
+                PanelField::Time(t) => panel.build_time = t,
+                PanelField::Scale(s) => panel.scale = s,
+            }
+        }
+        panel
+    }
+}
+
+PanelField:PanelField = {
+    <a:PanelAsset> => PanelField::PanelAsset(a),
+    <c:GoodConsumes> => PanelField::Cost(c),
+    <c:GoodUpkeep> => PanelField::Upkeep(c),
+    <p:Power> => PanelField::Power(p),
+    <t:Time> => PanelField::Time(t),
+    <s:Scale> => PanelField::Scale(s),
+}
+
 
 StapledonDatum:StapledonSwarmData = {
     <level:"number">  "=" "{" <fields:StapledonField*> "}" =>{
@@ -96,8 +163,22 @@ SwarmAsset:String = {
     "swarm_asset" "=" <s:"string"> => s,
 }
 
+SenderAsset:String = {
+    "sender_asset" "=" <s:"string"> => s,
+}
+
 ReceiverAsset:String = {
     "receiver_asset" "=" <s:"string"> => s,
+}
+
+PanelAsset:String = {
+    "panel_asset" "=" <s:"string"> => s,
+}
+
+Scale:f32 = {
+    "scale" "=" <d:"decimal_number"> => {
+        d.to_f32().unwrap()
+    },
 }
 
 GoodConsumes:Vec<GoodConsumes> = {

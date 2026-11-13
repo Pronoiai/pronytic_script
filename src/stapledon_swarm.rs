@@ -22,6 +22,12 @@ pub enum StapledonToken {
     #[regex(r"(-?\d+\.\d*)", |lex| Decimal::from_str(lex.slice()).expect("parsed_decimal"), priority = 4)]
     DecimalNumber(Decimal),
 
+    #[regex(r"panel_(\d+)", |lex| lex.slice().parse::<u8>().expect("parsing panel level"))]
+    PanelLevel(u8),
+
+    #[regex(r"transmission_(\d+)", |lex| lex.slice().parse::<u8>().expect("parsing panel level"))]
+    TransmissionLevel(u8),
+
     #[token("=")]
     Equal,
 
@@ -40,10 +46,19 @@ pub enum StapledonToken {
     #[token("name")]
     Name,
 
+    #[token("panel_assets")]
+    PanelAsset,
+
+    #[token("sender_asset")]
+    SenderAsset,
+
     #[token("swarm_asset")]
     SwarmAsset,
     #[token("receiver_asset")]
     ReceiverAsset,
+
+    #[token("scale")]
+    Scale,
 
     #[token("consumes")]
     Consumes,
@@ -82,6 +97,57 @@ pub struct StapledonSwarmData {
 
     pub costs: Vec<GoodConsumes>,
     pub upkeep: Vec<GoodConsumes>,
+}
+
+#[derive(Clone, Default, Debug)]
+pub struct StapledonPanelData {
+    pub level: u8,
+
+    pub asset: String,
+    pub scale: f32,
+
+    pub power: Decimal,
+    pub build_time: u8,
+
+    pub costs: Vec<GoodConsumes>,
+    pub upkeep: Vec<GoodConsumes>,
+}
+
+#[derive(Clone, Default, Debug)]
+pub struct StapledonTransmissionData {
+    pub level: u8,
+
+    pub sender_asset: String,
+    pub receiver_asset: String,
+
+    pub scale: f32,
+
+    pub costs: Vec<GoodConsumes>,
+    pub upkeep: Vec<GoodConsumes>,
+
+    pub power: Decimal,
+
+    pub build_time: u8,
+    pub base_transmission: Decimal,
+}
+
+pub enum PanelField {
+    PanelAsset(String),
+    Cost(Vec<GoodConsumes>),
+    Upkeep(Vec<GoodConsumes>),
+    Scale(f32),
+    Time(u8),
+    Power(Decimal),
+}
+
+pub enum TransmissionField {
+    SenderAsset(String),
+    ReceiverAsset(String),
+    Cost(Vec<GoodConsumes>),
+    Upkeep(Vec<GoodConsumes>),
+    Scale(f32),
+    Time(u8),
+    Power(Decimal),
 }
 
 pub enum Field {
