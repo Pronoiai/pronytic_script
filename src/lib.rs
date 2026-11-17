@@ -17,7 +17,7 @@ use crate::{
     asteroid::AsteroidData, asteroid_mining::AsteroidMiningData, common::DataParser,
     designation::DesignationData, orbital::OrbitalData, ranks::RankData, ship::ShipData,
     shipyard::ShipyardData, shipyard_buildings::ShipyardBuildingData,
-    stapledon_swarm::StapledonSwarmData, star::StarData, star_station::StarStationData,
+    stapledon_swarm::StapledonData, star::StarData, star_station::StarStationData,
     stellar_system::StellarData, tooltips::ToolTipsData,
 };
 
@@ -105,7 +105,7 @@ create_parse_data!({
     pub ships:Vec<ShipData>,
     pub shipyard: Vec<ShipyardData>,
     pub shipyard_buildings:Vec<ShipyardBuildingData>,
-    pub stapledon:Vec<StapledonSwarmData>,
+    pub stapledon:Vec<StapledonData>,
     pub star_data:Vec<StarData>,
     pub star_station_data:Vec<StarStationData>,
     pub stellar_system:Vec<StellarData>,

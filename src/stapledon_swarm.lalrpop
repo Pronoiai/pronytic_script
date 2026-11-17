@@ -1,5 +1,6 @@
 use rust_decimal::prelude::*;
-use crate::stapledon_swarm::{Field,PanelField,StapledonSwarmData,StapledonTransmissionData,StapledonPanelData
+use crate::stapledon_swarm::{Field,PanelField,StapledonData,StapledonSwarmData,
+StapledonTransmissionData,StapledonPanelData
 ,StapledonToken,TransmissionField};
 
 use crate::common::GoodConsumes;
@@ -51,8 +52,14 @@ extern {
 
 }
 
-pub StapledonData:Vec<StapledonSwarmData> = {
-    <list:StapledonDatum*> => list,
+pub StapledonData:Vec<StapledonData> = {
+    <list:StapledonItemDatum*> => list
+}
+
+StapledonItemDatum:StapledonData = {
+    <item:StapledonDatum> => StapledonData::SwarmData(item),
+    <item:StapledonTransmissionDatum> => StapledonData::TransmissionData(item),
+    <item:StapledonPanelDatum> => StapledonData::PanelData(item),
 }
 
 StapledonTransmissionDatum:StapledonTransmissionData = {

@@ -84,6 +84,13 @@ impl fmt::Display for StapledonToken {
 
 lalrpop_mod!(pub stapledon_swarm);
 
+#[derive(Clone, Debug)]
+pub enum StapledonData {
+    SwarmData(StapledonSwarmData),
+    PanelData(StapledonPanelData),
+    TransmissionData(StapledonTransmissionData),
+}
+
 #[derive(Clone, Default, Debug)]
 pub struct StapledonSwarmData {
     pub level: u8,
@@ -160,11 +167,11 @@ pub enum Field {
     Power(Decimal),
 }
 
-impl<'s> DataParser<'s> for StapledonSwarmData {
+impl<'s> DataParser<'s> for StapledonData {
     type Token = StapledonToken;
     fn parse_tokens(
         tokens: Vec<(usize, Self::Token, usize)>,
-    ) -> Result<Vec<StapledonSwarmData>, lalrpop_util::ParseError<usize, Self::Token, String>> {
+    ) -> Result<Vec<StapledonData>, lalrpop_util::ParseError<usize, Self::Token, String>> {
         stapledon_swarm::StapledonDataParser::new().parse(tokens)
     }
 }
