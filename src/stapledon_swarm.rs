@@ -22,10 +22,18 @@ pub enum StapledonToken {
     #[regex(r"(-?\d+\.\d*)", |lex| Decimal::from_str(lex.slice()).expect("parsed_decimal"), priority = 4)]
     DecimalNumber(Decimal),
 
-    #[regex(r"panel_(\d+)", |lex| lex.slice().parse::<u8>().expect("parsing panel level"))]
+    #[regex(r"panel_(\d+)", |lex|
+        {
+            lex.slice().strip_prefix("panel_").unwrap().parse::<u8>().expect("parsing panel level")
+        }
+    )]
     PanelLevel(u8),
 
-    #[regex(r"transmission_(\d+)", |lex| lex.slice().parse::<u8>().expect("parsing panel level"))]
+    #[regex(r"transmission_(\d+)", |lex|
+        {
+            lex.slice().strip_prefix("transmission_").unwrap().parse::<u8>().expect("parsing panel level")
+        }
+    )]
     TransmissionLevel(u8),
 
     #[token("=")]
